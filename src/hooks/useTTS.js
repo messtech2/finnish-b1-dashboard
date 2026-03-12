@@ -1,76 +1,87 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from "react";
 
-export function useTTS() {
-  const [voices, setVoices] = useState([]);
-  const [selectedVoice, setSelectedVoice] = useState(null);
+export  function useTTS() {
+
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // Load available voices
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-      setVoices(availableVoices);
-      
-      // Find best Finnish voice (prefer female, natural)
-      const finnishVoices = availableVoices.filter(voice => 
-        voice.lang.startsWith('fi')
-      );
-      
-      // Priority: Google Finnish > Female > Any Finnish
-      const bestVoice = finnishVoices.find(voice => 
-        voice.name.includes('Google') || 
-        voice.name.includes('Female') ||
-        voice.name.includes('Nainen')
-      ) || finnishVoices[0];
-      
-      if (bestVoice) {
-        setSelectedVoice(bestVoice);
-      }
-    };
-
-    loadVoices();
-    
-    // Voices load asynchronously in some browsers
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-  }, []);
-
-  const speak = (text, options = {}) => {
-    if (!('speechSynthesis' in window)) {
-      alert('Your browser does not support text-to-speech');
+  const fallbackSpeak = (text) => {
+    if (!("speechSynthesis" in window)) {
+      console.warn("Speech synthesis not supported");
       return;
     }
 
-    // Cancel any current speech
-    window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Use selected Finnish voice
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    }
-    
-    // Finnish language
-    utterance.lang = 'fi-FI';
-    
-    // Natural speech settings
-    utterance.rate = options.rate || 0.85;  // Slightly slower for clarity
-    utterance.pitch = options.pitch || 1.1; // Slightly higher for natural sound
-    utterance.volume = options.volume || 1;
 
-    utterance.onstart = () => setIsSpeaking(true);
+    const voices = window.speechSynthesis.getVoices();
+    const finnishVoice = voices.find(v => v.lang === "fi-FI");
+
+    if (finnishVoice) {
+      utterance.voice = finnishVoice;
+    }
+
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+
     utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
 
     window.speechSynthesis.speak(utterance);
   };
 
-  const stop = () => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
+  const speak = useCallback(async (text) => {
+
+    if (!text) return;
+
+    setIsSpeaking(true);
+
+    try {
+
+      // If offline → fallback immediately
+      if (!navigator.onLine) {
+        fallbackSpeak(text);
+        return;
+      }
+
+      const response = await fetch("/api/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text })
+      });
+
+      if (!response.ok) {
+        throw new Error("TTS request failed");
+      }
+
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+
+      const audio = new Audio(audioUrl);
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        console.warn("Audio failed, using fallback");
+        fallbackSpeak(text);
+      };
+
+      await audio.play();
+
+    } catch (error) {
+
+      console.warn("TTS error, using fallback:", error);
+      fallbackSpeak(text);
+
+    }
+
+  }, []);
+
+  return {
+    speak,
+    isSpeaking
   };
 
-  return { speak, stop, isSpeaking, voices, selectedVoice, setSelectedVoice };
 }

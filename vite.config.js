@@ -18,6 +18,9 @@ export default defineConfig({
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
+         registerType: 'autoUpdate', // ← This enables auto-activate
+  includeAssets: ['favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png'],
+
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -36,7 +39,13 @@ export default defineConfig({
             purpose: 'any maskable'
           }
         ]
-      }
+      },
+       workbox: {
+    // Skip waiting + claim clients = instant activation
+    clientsClaim: true,
+    skipWaiting: true,
+    globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
+  }
     })
   ]
 })
