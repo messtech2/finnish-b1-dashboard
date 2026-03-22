@@ -1,26 +1,28 @@
 import { useState } from 'react';
 import { useTTS } from '../hooks/useTTS';
-import usePronunciation from '../hooks/usePronunciation';
-import PronunciationFeedback from './PronunciationFeedback';
+import { usePronunciation } from '../hooks/usePronunciation';
+import {PronunciationFeedback} from './PronunciationFeedback';
 
-export default function Flashcards({ words, showEnglish = false }) {
+export default function Flashcards({ words }) {
   const { speak, isSpeaking } = useTTS();
   const { startListening, listening, result, resetResult } = usePronunciation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [showPronunciation, setShowPronunciation] = useState(false);
-  const [hideWord, setHideWord] = useState(true);
+  const [hideWord, setHideWord] = useState(true); // NEW: Hide word for active recall
 
   if (words.length === 0) return <div className="card-placeholder">Lisää sanoja harjoitteluun!</div>;
 
   const currentWord = words[currentIndex];
 
+  // Speak full sentence (priority) or word
   const handleSpeak = () => {
     speak(currentWord.word, { sentence: currentWord.example });
   };
 
   const handlePronunciation = () => {
     setShowPronunciation(true);
+    // Practice speaking the full sentence
     startListening(currentWord.example || currentWord.word);
   };
 
@@ -42,6 +44,7 @@ export default function Flashcards({ words, showEnglish = false }) {
     setCurrentIndex((prev) => (prev - 1 + words.length) % words.length);
   };
 
+  // Create fill-in-blank sentence
   const createBlankSentence = (sentence, word) => {
     if (!sentence || !word) return sentence;
     const regex = new RegExp(word, 'gi');
@@ -72,6 +75,7 @@ export default function Flashcards({ words, showEnglish = false }) {
         onClick={() => setIsFlipped(!isFlipped)}
       >
         <div className="card-front">
+          {/* FRONT: Context sentence with hidden word (active recall) */}
           <div className="sentence-front">
             <p className="sentence-text">
               {hideWord 
@@ -91,23 +95,14 @@ export default function Flashcards({ words, showEnglish = false }) {
               {isSpeaking ? '🔊' : '🔈'}
             </button>
           </div>
-          
-          {showEnglish && currentWord.exampleTranslation && (
-            <p className="sentence-translation-hint">{currentWord.exampleTranslation}</p>
-          )}
-          
           <p className="hint">(Napauta kääntääksesi)</p>
         </div>
 
         <div className="card-back">
+          {/* BACK: Word + meaning + pronunciation practice */}
           <h2 className="word-back">{currentWord.word}</h2>
-          
-          {showEnglish && (
-            <>
-              <p className="meaning-back">{currentWord.meaning}</p>
-              <p className="translation-back">{currentWord.exampleTranslation}</p>
-            </>
-          )}
+          <p className="meaning-back">{currentWord.meaning}</p>
+          <p className="translation-back">{currentWord.exampleTranslation}</p>
           
           <div className="card-actions-back">
             <button 
@@ -125,6 +120,7 @@ export default function Flashcards({ words, showEnglish = false }) {
         </div>
       </div>
       
+      {/* Pronunciation Feedback */}
       {showPronunciation && (
         <PronunciationFeedback 
           result={result} 

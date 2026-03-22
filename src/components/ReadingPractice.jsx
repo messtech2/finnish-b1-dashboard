@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTTS } from '../hooks/useTTS';
 import { readingTexts } from '../data/readingData';
 
-export default function ReadingPractice() {
+export default function ReadingPractice({ showEnglish = false }) {
   const { speak, stop, isSpeaking } = useTTS();
   const [activeTextId, setActiveTextId] = useState(readingTexts[0].id);
 
@@ -47,6 +47,14 @@ export default function ReadingPractice() {
             {isSpeaking ? '⏹️' : '🔈'}
           </button>
         </div>
+        
+        {/* English translation of text - TOGGLEABLE */}
+        {showEnglish && activeText.translation && (
+          <div className="text-translation">
+            <p className="translation-label">English:</p>
+            <p className="translation-text">{activeText.translation}</p>
+          </div>
+        )}
         
         <div className="questions">
           <h4>Questions:</h4>

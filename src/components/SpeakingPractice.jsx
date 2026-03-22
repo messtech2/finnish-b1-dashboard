@@ -12,7 +12,19 @@ const B1_PROMPTS = [
   "Mitä mieltä olet somesta?"
 ];
 
-export default function SpeakingPractice() {
+// English translations for prompts (optional hints)
+const PROMPT_TRANSLATIONS = {
+  "Miksi opiskelet suomea?": "Why are you studying Finnish?",
+  "Kerro tärkeästä kokemuksesta viime vuonna.": "Tell about an important experience last year.",
+  "Mitä aiot tehdä seuraavien kuuden kuukauden aikana?": "What are you going to do in the next six months?",
+  "Mitä teet vapaa-ajalla?": "What do you do in your free time?",
+  "Kerro päivästäsi eilen.": "Tell about your day yesterday.",
+  "Mikä on lempiruokasi ja miksi?": "What is your favorite food and why?",
+  "Kuvaile asuinympäristöäsi.": "Describe your living environment.",
+  "Mitä mieltä olet somesta?": "What do you think about social media?"
+};
+
+export default function SpeakingPractice({ showEnglish = false }) {
   const { speak, isSpeaking } = useTTS();
   const [currentPrompt, setCurrentPrompt] = useState(B1_PROMPTS[0]);
 
@@ -29,7 +41,13 @@ export default function SpeakingPractice() {
     <div className="speaking-section">
       <h3>🗣️ Speaking Practice (B1 Level)</h3>
       <div className="prompt-box">
-        <p>{currentPrompt}</p>
+        <p className="prompt-finnish">{currentPrompt}</p>
+        
+        {/* English translation - TOGGLEABLE */}
+        {showEnglish && PROMPT_TRANSLATIONS[currentPrompt] && (
+          <p className="prompt-translation">{PROMPT_TRANSLATIONS[currentPrompt]}</p>
+        )}
+        
         <button 
           className={`speaker-btn-small ${isSpeaking ? 'speaking' : ''}`}
           onClick={handleSpeak}

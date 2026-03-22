@@ -148,5 +148,31 @@
     "exampleTranslation": "Don't speed, it's dangerous.",
     "addedAt": "2025-01-01T00:00:00.000Z",
     "category": "base"
+  },
+  {
+    "id": 1,
+    "word": "nukkua pommiin",
+    "meaning": "sleep in (oversleep)",
+    "example": "Heräsin myöhään, koska nukuin pommiin.",
+    "exampleTranslation": "I woke up late because I slept in.",
+    "category": "daily-routines",
+    "difficulty": "medium",
+    "strength": 0,
+    "lastReviewed": null,
+    "userExamples": [],
+    "addedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "word": "raaseporin linna",
+    "meaning": "Raseborg Castle",
+    "example": "Haluan käydä Raaseporin linnassa kesällä.",
+    "exampleTranslation": "I want to visit Raseborg Castle in summer.",
+    "category": "travel",
+    "difficulty": "hard",
+    "strength": 0,
+    "lastReviewed": null,
+    "userExamples": [],
+    "addedAt": "2025-01-01T00:00:00.000Z"
   }
 ]
