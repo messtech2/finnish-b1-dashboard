@@ -1,0 +1,122 @@
+[
+  {
+    "word": "nukkua pommiin",
+    "meaning": "sleep in (oversleep)",
+    "example": "Heräsin myöhään, koska nukuin pommiin.",
+    "exampleTranslation": "I woke up late because I slept in.",
+    "category": "daily-routines",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kahvi",
+    "meaning": "coffee",
+    "example": "Juon kahvia aamulla.",
+    "exampleTranslation": "I drink coffee in the morning.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kirja",
+    "meaning": "book",
+    "example": "Luen kirjaa illalla.",
+    "exampleTranslation": "I read a book in the evening.",
+    "category": "hobbies",
+    "difficulty": "easy"
+  },
+  {
+    "word": "työ",
+    "meaning": "work, job",
+    "example": "Menen töihin bussilla.",
+    "exampleTranslation": "I go to work by bus.",
+    "category": "work",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ystävä",
+    "meaning": "friend",
+    "example": "Tapaan ystäväni viikonloppuna.",
+    "exampleTranslation": "I meet my friend on the weekend.",
+    "category": "family",
+    "difficulty": "easy"
+  },
+  {
+    "word": "aamiainen",
+    "meaning": "breakfast",
+    "example": "Syön aamiaista klo 8.",
+    "exampleTranslation": "I eat breakfast at 8.",
+    "category": "daily-routines",
+    "difficulty": "easy"
+  },
+  {
+    "word": "lounas",
+    "meaning": "lunch",
+    "example": "Syön lounasta töissä.",
+    "exampleTranslation": "I eat lunch at work.",
+    "category": "daily-routines",
+    "difficulty": "easy"
+  },
+  {
+    "word": "päivällinen",
+    "meaning": "dinner",
+    "example": "Päivällinen on klo 18.",
+    "exampleTranslation": "Dinner is at 6 PM.",
+    "category": "daily-routines",
+    "difficulty": "medium"
+  },
+  {
+    "word": "matkustaa",
+    "meaning": "to travel",
+    "example": "Haluan matkustaa Italiaan.",
+    "exampleTranslation": "I want to travel to Italy.",
+    "category": "travel",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kieli",
+    "meaning": "language, tongue",
+    "example": "Opiskelen suomen kieltä.",
+    "exampleTranslation": "I am studying the Finnish language.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "oppia",
+    "meaning": "to learn",
+    "example": "Haluan oppia suomea.",
+    "exampleTranslation": "I want to learn Finnish.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "puhua",
+    "meaning": "to speak",
+    "example": "Puhun suomea vähän.",
+    "exampleTranslation": "I speak Finnish a little.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ymmärtää",
+    "meaning": "to understand",
+    "example": "Ymmärrän suomea vähän.",
+    "exampleTranslation": "I understand Finnish a little.",
+    "category": "general",
+    "difficulty": "medium"
+  },
+  {
+    "word": "raaseporin linna",
+    "meaning": "Raseborg Castle",
+    "example": "Haluan käydä Raaseporin linnassa kesällä.",
+    "exampleTranslation": "I want to visit Raseborg Castle in summer.",
+    "category": "travel",
+    "difficulty": "hard"
+  },
+  {
+    "word": "lukuaika",
+    "meaning": "reading time",
+    "example": "Lukuaika on rauhallista.",
+    "exampleTranslation": "Reading time is peaceful.",
+    "category": "hobbies",
+    "difficulty": "medium"
+  }
+]
