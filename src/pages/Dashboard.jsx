@@ -13,7 +13,7 @@ import { useVocabularyLoader } from '../hooks/useVocabularyLoader';
 import TranslationToggle from '../components/TranslationToggle';
 
 // ✅ YOUR GITHUB RAW URL (update this after pushing vocabularies.json)
-const GITHUB_VOCAB_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/main/vocabularies.json';
+const GITHUB_VOCAB_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/master/vocabularies.json';
 const STORAGE_KEY = 'finnish-vocab-v3'; // Updated key for new system
 
 export default function Dashboard() {
