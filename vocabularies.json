@@ -1,42 +1,490 @@
 [
-  {"word": "nukkua pommiin", "meaning": "sleep in (oversleep)", "example": "Heräsin myöhään.", "exampleTranslation": "I woke up late.", "category": "daily-routines", "difficulty": "medium"},
-  {"word": "kahvi", "meaning": "coffee", "example": "Juon kahvia.", "exampleTranslation": "I drink coffee.", "category": "food", "difficulty": "easy"},
-  {"word": "kieli", "meaning": "language", "example": "Opiskelen kieltä.", "exampleTranslation": "I study language.", "category": "general", "difficulty": "easy"},
-  {"word": "kirja", "meaning": "book", "example": "Luen kirjaa.", "exampleTranslation": "I read a book.", "category": "hobbies", "difficulty": "easy"},
-  {"word": "työ", "meaning": "work", "example": "Menen töihin.", "exampleTranslation": "I go to work.", "category": "work", "difficulty": "easy"},
-  {"word": "ystävä", "meaning": "friend", "example": "Tapaan ystävän.", "exampleTranslation": "I meet a friend.", "category": "family", "difficulty": "easy"},
-  {"word": "aamiainen", "meaning": "breakfast", "example": "Syön aamiaista.", "exampleTranslation": "I eat breakfast.", "category": "daily-routines", "difficulty": "easy"},
-  {"word": "lounas", "meaning": "lunch", "example": "Syön lounasta.", "exampleTranslation": "I eat lunch.", "category": "daily-routines", "difficulty": "easy"},
-  {"word": "päivällinen", "meaning": "dinner", "example": "Päivällinen on klo 18.", "exampleTranslation": "Dinner is at 6 PM.", "category": "daily-routines", "difficulty": "medium"},
-  {"word": "matkustaa", "meaning": "travel", "example": "Haluan matkustaa.", "exampleTranslation": "I want to travel.", "category": "travel", "difficulty": "medium"},
-  {"word": "oppia", "meaning": "learn", "example": "Haluan oppia.", "exampleTranslation": "I want to learn.", "category": "general", "difficulty": "easy"},
-  {"word": "puhua", "meaning": "speak", "example": "Puhun suomea.", "exampleTranslation": "I speak Finnish.", "category": "general", "difficulty": "easy"},
-  {"word": "ymmärtää", "meaning": "understand", "example": "Ymmärrän suomea.", "exampleTranslation": "I understand Finnish.", "category": "general", "difficulty": "medium"},
-  {"word": "vesi", "meaning": "water", "example": "Juon vettä.", "exampleTranslation": "I drink water.", "category": "food", "difficulty": "easy"},
-  {"word": "leipä", "meaning": "bread", "example": "Syön leipää.", "exampleTranslation": "I eat bread.", "category": "food", "difficulty": "easy"},
-  {"word": "talo", "meaning": "house", "example": "Asun talossa.", "exampleTranslation": "I live in a house.", "category": "general", "difficulty": "easy"},
-  {"word": "auto", "meaning": "car", "example": "Ajan autoa.", "exampleTranslation": "I drive a car.", "category": "travel", "difficulty": "easy"},
-  {"word": "aika", "meaning": "time", "example": "Minulla on aikaa.", "exampleTranslation": "I have time.", "category": "general", "difficulty": "easy"},
-  {"word": "perhe", "meaning": "family", "example": "Vietaan aikaa perheen kanssa.", "exampleTranslation": "I spend time with family.", "category": "family", "difficulty": "easy"},
-  {"word": "ruoka", "meaning": "food", "example": "Ruoka on hyvää.", "exampleTranslation": "The food is good.", "category": "food", "difficulty": "easy"},
-  {"word": "koulu", "meaning": "school", "example": "Menen kouluun.", "exampleTranslation": "I go to school.", "category": "general", "difficulty": "easy"},
-  {"word": "opettaja", "meaning": "teacher", "example": "Opettaja opettaa.", "exampleTranslation": "The teacher teaches.", "category": "work", "difficulty": "easy"},
-  {"word": "opiskelija", "meaning": "student", "example": "Olen opiskelija.", "exampleTranslation": "I am a student.", "category": "general", "difficulty": "easy"},
-  {"word": "raha", "meaning": "money", "example": "Minulla on rahaa.", "exampleTranslation": "I have money.", "category": "general", "difficulty": "easy"},
-  {"word": "kauppa", "meaning": "store", "example": "Menen kauppaan.", "exampleTranslation": "I go to the store.", "category": "daily-routines", "difficulty": "easy"},
-  {"word": "puisto", "meaning": "park", "example": "Kävelen puistossa.", "exampleTranslation": "I walk in the park.", "category": "travel", "difficulty": "easy"},
-  {"word": "sää", "meaning": "weather", "example": "Sää on kaunis.", "exampleTranslation": "The weather is nice.", "category": "general", "difficulty": "easy"},
-  {"word": "väri", "meaning": "color", "example": "Sininen on väri.", "exampleTranslation": "Blue is a color.", "category": "general", "difficulty": "easy"},
-  {"word": "eläin", "meaning": "animal", "example": "Kissa on eläin.", "exampleTranslation": "A cat is an animal.", "category": "general", "difficulty": "easy"},
-  {"word": "sininen", "meaning": "blue", "example": "Taivas on sininen.", "exampleTranslation": "The sky is blue.", "category": "general", "difficulty": "easy"},
-  {"word": "punainen", "meaning": "red", "example": "Omena on punainen.", "exampleTranslation": "The apple is red.", "category": "general", "difficulty": "easy"},
-  {"word": "vihreä", "meaning": "green", "example": "Ruoho on vihreää.", "exampleTranslation": "The grass is green.", "category": "general", "difficulty": "easy"},
-  {"word": "koira", "meaning": "dog", "example": "Minulla on koira.", "exampleTranslation": "I have a dog.", "category": "general", "difficulty": "easy"},
-  {"word": "kissa", "meaning": "cat", "example": "Kissa nukkuu.", "exampleTranslation": "The cat sleeps.", "category": "general", "difficulty": "easy"},
-  {"word": "lintu", "meaning": "bird", "example": "Lintu laulaa.", "exampleTranslation": "The bird sings.", "category": "general", "difficulty": "easy"},
-  {"word": "puu", "meaning": "tree", "example": "Puu on iso.", "exampleTranslation": "The tree is big.", "category": "general", "difficulty": "easy"},
-  {"word": "kukka", "meaning": "flower", "example": "Kukka on kaunis.", "exampleTranslation": "The flower is beautiful.", "category": "general", "difficulty": "easy"},
-  {"word": "suuri", "meaning": "big", "example": "Talo on suuri.", "exampleTranslation": "The house is big.", "category": "general", "difficulty": "easy"},
-  {"word": "pieni", "meaning": "small", "example": "Kissa on pieni.", "exampleTranslation": "The cat is small.", "category": "general", "difficulty": "easy"},
-  {"word": "hyvä", "meaning": "good", "example": "Ruoka on hyvä.", "exampleTranslation": "The food is good.", "category": "general", "difficulty": "easy"}
+  {
+    "word": "nukkua pommiin",
+    "meaning": "sleep in (oversleep)",
+    "example": "Heräsin myöhään.",
+    "exampleTranslation": "I woke up late.",
+    "category": "daily-routines",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kahvi",
+    "meaning": "coffee",
+    "example": "Juon kahvia.",
+    "exampleTranslation": "I drink coffee.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kieli",
+    "meaning": "language",
+    "example": "Opiskelen kieltä.",
+    "exampleTranslation": "I study language.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kirja",
+    "meaning": "book",
+    "example": "Luen kirjaa.",
+    "exampleTranslation": "I read a book.",
+    "category": "hobbies",
+    "difficulty": "easy"
+  },
+  {
+    "word": "työ",
+    "meaning": "work",
+    "example": "Menen töihin.",
+    "exampleTranslation": "I go to work.",
+    "category": "work",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ystävä",
+    "meaning": "friend",
+    "example": "Tapaan ystävän.",
+    "exampleTranslation": "I meet a friend.",
+    "category": "family",
+    "difficulty": "easy"
+  },
+  {
+    "word": "aamiainen",
+    "meaning": "breakfast",
+    "example": "Syön aamiaista.",
+    "exampleTranslation": "I eat breakfast.",
+    "category": "daily-routines",
+    "difficulty": "easy"
+  },
+  {
+    "word": "lounas",
+    "meaning": "lunch",
+    "example": "Syön lounasta.",
+    "exampleTranslation": "I eat lunch.",
+    "category": "daily-routines",
+    "difficulty": "easy"
+  },
+  {
+    "word": "päivällinen",
+    "meaning": "dinner",
+    "example": "Päivällinen on klo 18.",
+    "exampleTranslation": "Dinner is at 6 PM.",
+    "category": "daily-routines",
+    "difficulty": "medium"
+  },
+  {
+    "word": "matkustaa",
+    "meaning": "travel",
+    "example": "Haluan matkustaa.",
+    "exampleTranslation": "I want to travel.",
+    "category": "travel",
+    "difficulty": "medium"
+  },
+  {
+    "word": "oppia",
+    "meaning": "learn",
+    "example": "Haluan oppia.",
+    "exampleTranslation": "I want to learn.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "puhua",
+    "meaning": "speak",
+    "example": "Puhun suomea.",
+    "exampleTranslation": "I speak Finnish.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ymmärtää",
+    "meaning": "understand",
+    "example": "Ymmärrän suomea.",
+    "exampleTranslation": "I understand Finnish.",
+    "category": "general",
+    "difficulty": "medium"
+  },
+  {
+    "word": "vesi",
+    "meaning": "water",
+    "example": "Juon vettä.",
+    "exampleTranslation": "I drink water.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "leipä",
+    "meaning": "bread",
+    "example": "Syön leipää.",
+    "exampleTranslation": "I eat bread.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "talo",
+    "meaning": "house",
+    "example": "Asun talossa.",
+    "exampleTranslation": "I live in a house.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "auto",
+    "meaning": "car",
+    "example": "Ajan autoa.",
+    "exampleTranslation": "I drive a car.",
+    "category": "travel",
+    "difficulty": "easy"
+  },
+  {
+    "word": "aika",
+    "meaning": "time",
+    "example": "Minulla on aikaa.",
+    "exampleTranslation": "I have time.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "perhe",
+    "meaning": "family",
+    "example": "Vietaan aikaa perheen kanssa.",
+    "exampleTranslation": "I spend time with family.",
+    "category": "family",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ruoka",
+    "meaning": "food",
+    "example": "Ruoka on hyvää.",
+    "exampleTranslation": "The food is good.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "koulu",
+    "meaning": "school",
+    "example": "Menen kouluun.",
+    "exampleTranslation": "I go to school.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "opettaja",
+    "meaning": "teacher",
+    "example": "Opettaja opettaa.",
+    "exampleTranslation": "The teacher teaches.",
+    "category": "work",
+    "difficulty": "easy"
+  },
+  {
+    "word": "opiskelija",
+    "meaning": "student",
+    "example": "Olen opiskelija.",
+    "exampleTranslation": "I am a student.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "raha",
+    "meaning": "money",
+    "example": "Minulla on rahaa.",
+    "exampleTranslation": "I have money.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kauppa",
+    "meaning": "store",
+    "example": "Menen kauppaan.",
+    "exampleTranslation": "I go to the store.",
+    "category": "daily-routines",
+    "difficulty": "easy"
+  },
+  {
+    "word": "puisto",
+    "meaning": "park",
+    "example": "Kävelen puistossa.",
+    "exampleTranslation": "I walk in the park.",
+    "category": "travel",
+    "difficulty": "easy"
+  },
+  {
+    "word": "sää",
+    "meaning": "weather",
+    "example": "Sää on kaunis.",
+    "exampleTranslation": "The weather is nice.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "väri",
+    "meaning": "color",
+    "example": "Sininen on väri.",
+    "exampleTranslation": "Blue is a color.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "eläin",
+    "meaning": "animal",
+    "example": "Kissa on eläin.",
+    "exampleTranslation": "A cat is an animal.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "sininen",
+    "meaning": "blue",
+    "example": "Taivas on sininen.",
+    "exampleTranslation": "The sky is blue.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "punainen",
+    "meaning": "red",
+    "example": "Omena on punainen.",
+    "exampleTranslation": "The apple is red.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vihreä",
+    "meaning": "green",
+    "example": "Ruoho on vihreää.",
+    "exampleTranslation": "The grass is green.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "koira",
+    "meaning": "dog",
+    "example": "Minulla on koira.",
+    "exampleTranslation": "I have a dog.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kissa",
+    "meaning": "cat",
+    "example": "Kissa nukkuu.",
+    "exampleTranslation": "The cat sleeps.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "lintu",
+    "meaning": "bird",
+    "example": "Lintu laulaa.",
+    "exampleTranslation": "The bird sings.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "puu",
+    "meaning": "tree",
+    "example": "Puu on iso.",
+    "exampleTranslation": "The tree is big.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kukka",
+    "meaning": "flower",
+    "example": "Kukka on kaunis.",
+    "exampleTranslation": "The flower is beautiful.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "suuri",
+    "meaning": "big",
+    "example": "Talo on suuri.",
+    "exampleTranslation": "The house is big.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "pieni",
+    "meaning": "small",
+    "example": "Kissa on pieni.",
+    "exampleTranslation": "The cat is small.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "hyvä",
+    "meaning": "good",
+    "example": "Ruoka on hyvä.",
+    "exampleTranslation": "The food is good.",
+    "category": "general",
+    "difficulty": "easy"
+  },
+  {
+    "word": "olen pahoillani",
+    "meaning": "I'm sorry",
+    "example": "Olen pahoillani, en osaa lukea nimeäsi.",
+    "exampleTranslation": "I'm sorry, I can't read your name.",
+    "category": "politeness",
+    "difficulty": "easy"
+  },
+  {
+    "word": "hyvää yötä",
+    "meaning": "Good night",
+    "example": "Hyvää yötä ja kiitos paljon.",
+    "exampleTranslation": "Good night and thank you very much.",
+    "category": "greetings",
+    "difficulty": "easy"
+  },
+  {
+    "word": "hauska tutustua",
+    "meaning": "Nice to meet you",
+    "example": "Hauska tutustua, Mari.",
+    "exampleTranslation": "Nice to meet you, Mari.",
+    "category": "greetings",
+    "difficulty": "easy"
+  },
+  {
+    "word": "näkemiin",
+    "meaning": "Goodbye",
+    "example": "Näkemiin, ystäväni.",
+    "exampleTranslation": "Goodbye, my friend.",
+    "category": "greetings",
+    "difficulty": "easy"
+  },
+  {
+    "word": "huono",
+    "meaning": "bad",
+    "example": "Mies on huono.",
+    "exampleTranslation": "The man is bad.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "hyvä",
+    "meaning": "good",
+    "example": "Vihannekset ovat hyväksi sinulle.",
+    "exampleTranslation": "Vegetables are good for you.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "nätti",
+    "meaning": "pretty",
+    "example": "Mekkosi on tosi nätti.",
+    "exampleTranslation": "Your dress is very pretty.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "ruma",
+    "meaning": "ugly",
+    "example": "Rumasta ankanpoikasesta tuli kaunis joutsen.",
+    "exampleTranslation": "The ugly duckling became a beautiful swan.",
+    "category": "adjectives",
+    "difficulty": "medium"
+  },
+  {
+    "word": "helppo",
+    "meaning": "easy",
+    "example": "Rairuohoa on helppo kasvattaa.",
+    "exampleTranslation": "It is easy to grow rye grass.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vaikea",
+    "meaning": "difficult",
+    "example": "Japanin kieli on erittäin vaikeaa.",
+    "exampleTranslation": "Japanese is very difficult.",
+    "category": "adjectives",
+    "difficulty": "medium"
+  },
+  {
+    "word": "lähellä",
+    "meaning": "near",
+    "example": "Asun lähellä yliopistoa.",
+    "exampleTranslation": "I live near the university.",
+    "category": "prepositions",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kaukana",
+    "meaning": "far",
+    "example": "Nainen katsoo jotakin kaukana olevaa.",
+    "exampleTranslation": "The woman is looking at something far away.",
+    "category": "prepositions",
+    "difficulty": "medium"
+  },
+  {
+    "word": "pieni",
+    "meaning": "small",
+    "example": "Auto on pieni, mutta se on erittäin voimakas.",
+    "exampleTranslation": "The car is small, but it's very powerful.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "tänään",
+    "meaning": "today",
+    "example": "Tänään kello 6:15.",
+    "exampleTranslation": "Today at 6:15.",
+    "category": "time",
+    "difficulty": "easy"
+  },
+  {
+    "word": "eilen",
+    "meaning": "yesterday",
+    "example": "Otin vapaapäivän eilen.",
+    "exampleTranslation": "I took a day off yesterday.",
+    "category": "time",
+    "difficulty": "easy"
+  },
+  {
+    "word": "tehdä",
+    "meaning": "to do",
+    "example": "Minun täytyy tehdä kotitehtäväni.",
+    "exampleTranslation": "I must do my homework.",
+    "category": "verbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "mennä",
+    "meaning": "to go",
+    "example": "Menen kouluun bussilla.",
+    "exampleTranslation": "I go to school by bus.",
+    "category": "verbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "nauraa",
+    "meaning": "to laugh",
+    "example": "Vanhukset nauravat.",
+    "exampleTranslation": "The elderly people are laughing.",
+    "category": "verbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "herkullinen",
+    "meaning": "delicious",
+    "example": "Tämä keitto on todella herkullista!",
+    "exampleTranslation": "This soup is really delicious!",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vesi",
+    "meaning": "water",
+    "example": "Nainen juo vettä.",
+    "exampleTranslation": "The woman drinks water.",
+    "category": "food",
+    "difficulty": "easy"
+  },
+  {
+    "word": "tee",
+    "meaning": "tea",
+    "example": "Haluaisitko kupin teetä?",
+    "exampleTranslation": "Would you like a cup of tea?",
+    "category": "food",
+    "difficulty": "easy"
+  }
 ]

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useTTS } from '../hooks/useTTS';
 import { useSRS } from '../hooks/useSRS';
-import AchievementBadge from './AchievementBadge';
-import StrengthTracker from './StrengthTracker';
+import Card from './ui/Card';
+import './VocabularyList.css';
 
 export default function VocabularyList({ 
   words, 
@@ -10,108 +11,154 @@ export default function VocabularyList({
   onEdit, 
   editingId, 
   baseIds,
-  showEnglish = false,
   activeWordId,
   setActiveWordId,
   getProgress,
   completeStep
 }) {
-  const { speak, isSpeaking } = useTTS();
-  const { srsData, updateStrength } = useSRS();
+  const { speak, stop, isSpeaking, isWordPlaying } = useTTS();
+  const { srsData } = useSRS();
+  const [expandedCards, setExpandedCards] = useState({});
+  const [showTranslation, setShowTranslation] = useState({});
 
-  const handleSpeak = (word) => {
-    speak(word.word, { sentence: word.example });
-    if (activeWordId !== word.id) {
-      setActiveWordId(word.id);
-      completeStep(word.id, 'read');
-    }
+  const toggleExpand = (wordId) => {
+    setExpandedCards(prev => ({ ...prev, [wordId]: !prev[wordId] }));
   };
 
-  const handleStrengthUpdate = (wordId, rating) => {
-    updateStrength(wordId, rating);
+  const toggleTranslation = (wordId) => {
+    setShowTranslation(prev => ({ ...prev, [wordId]: !prev[wordId] }));
+  };
+
+  const handleSpeak = (word, e) => {
+    e.stopPropagation();
+    if (isWordPlaying(word.id)) stop();
+    else {
+      speak(word.word, { sentence: word.example }, word.id);
+      setActiveWordId?.(word.id);
+      completeStep?.(word.id, 'read');
+    }
   };
 
   if (words.length === 0) {
     return (
-      <div className="vocab-list">
-        <h3>📚 Sanastoni ({totalWords})</h3>
-        <p className="empty-state">Ei sanoja vielä. Lisää ensimmäinen sana!</p>
-      </div>
+      <Card className="vocab-empty">
+        <span className="empty-emoji">📚</span>
+        <h3>Ei sanoja vielä</h3>
+        <p>Lisää ensimmäinen sana aloittaaksesi!</p>
+      </Card>
     );
   }
 
   return (
     <div className="vocab-list">
-      <h3>📚 Sanastoni ({totalWords})</h3>
-      <ul>
-        {words.map((word, index) => {
+      <div className="vocab-header">
+        <h2>Sanasto</h2>
+        <span className="vocab-count">{totalWords} sanaa</span>
+      </div>
+      
+      <div className="vocab-cards">
+        {words.map((word) => {
           const isBaseWord = baseIds?.includes(word.id);
           const srs = srsData[word.id] || { strength: 0 };
           const progress = getProgress(word.id);
-          
-          // ✅ FIX: Include index in key for extra uniqueness
+          const isPlaying = isWordPlaying(word.id);
+          const isExpanded = expandedCards[word.id];
+          const showTrans = showTranslation[word.id];
+
           return (
-            <li key={`vocab-${word.id}-idx${index}`} className={`vocab-item ${editingId === word.id ? 'editing' : ''} ${activeWordId === word.id ? 'active-learning' : ''}`}>
-              <div className="sentence-section">
-                <p className="example-sentence">
-                  {highlightWord(word.example, word.word)}
-                  <button 
-                    className={`speaker-btn-sentence ${isSpeaking ? 'speaking' : ''}`}
-                    onClick={() => handleSpeak(word)}
-                    disabled={isSpeaking}
-                    title="Kuuntele lause"
-                  >
-                    {isSpeaking ? '🔊' : '🔈'}
-                  </button>
-                </p>
-                {showEnglish && word.exampleTranslation && (
-                  <p className="example-translation">{word.exampleTranslation}</p>
-                )}
+            <Card 
+              key={word.id}
+              className={`vocab-card ${isExpanded ? 'expanded' : ''} ${activeWordId === word.id ? 'active' : ''}`}
+              onClick={() => toggleExpand(word.id)}
+              hover={true}
+            >
+              {/* Left Border Progress Indicator */}
+              <div className="card-progress-indicator" style={{
+                background: progress.mastered ? 'var(--success)' : 
+                           srs.strength > 0 ? 'var(--primary)' : '#e0e0e0'
+              }} />
+
+              {/* Sentence (Primary - Large) */}
+              <div className="vocab-sentence">
+                <button 
+                  className={`audio-btn ${isPlaying ? 'playing' : ''}`}
+                  onClick={(e) => handleSpeak(word, e)}
+                  type="button"
+                >
+                  {isPlaying ? '⏹️' : '🔊'}
+                </button>
+                <div className="sentence-content">
+                  <p className="sentence-text">{word.example}</p>
+                  {showTrans && word.exampleTranslation && (
+                    <p className="sentence-translation">{word.exampleTranslation}</p>
+                  )}
+                </div>
+                <button 
+                  className="translate-btn"
+                  onClick={(e) => { e.stopPropagation(); toggleTranslation(word.id); }}
+                  type="button"
+                >
+                  {showTrans ? '🙈' : '👁️'}
+                </button>
               </div>
 
-              <div className="word-section">
-                <div className="word-info">
-                  <strong className="word-finnish">{word.word}</strong>
-                  {showEnglish && <span className="word-meaning">= {word.meaning}</span>}
+              {/* Word + Meaning (Secondary) */}
+              <div className="vocab-word">
+                <div className="word-main">
+                  <span className="word-finnish">{word.word}</span>
+                  {showTrans && word.meaning && (
+                    <span className="word-meaning">= {word.meaning}</span>
+                  )}
                 </div>
                 <div className="word-meta">
                   {word.category && <span className="category-badge">{word.category}</span>}
-                  {srs.strength > 0 && <StrengthTracker strength={srs.strength} />}
-                  {progress.mastered && <span className="mastered-badge-small">🏆</span>}
+                  {srs.strength > 0 && (
+                    <div className="srs-dots">
+                      {[1,2,3,4,5].map(i => (
+                        <span key={i} className={`srs-dot ${i <= srs.strength ? 'filled' : ''}`} />
+                      ))}
+                    </div>
+                  )}
+                  {progress.mastered && <span className="mastered-badge" title="Hallittu">🏆</span>}
                 </div>
               </div>
 
-              <div className="word-actions">
-                {!isBaseWord && (
-                  <button className="edit-btn-small" onClick={() => onEdit(word)} title="Muokkaa">✏️</button>
-                )}
-                {!isBaseWord && (
-                  <button className="delete-btn" onClick={() => onDelete(word.id)} title="Poista">×</button>
-                )}
-              </div>
+              {/* Expanded Actions */}
+              {isExpanded && (
+                <div className="vocab-actions">
+                  <div className="practice-section">
+                    <span className="section-label">Harjoittele:</span>
+                    <div className="practice-buttons">
+                      <button className="practice-btn read" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'read'); }} type="button">
+                        📖 Opiskele
+                      </button>
+                      <button className="practice-btn speak" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'practice'); }} type="button">
+                        🗣️ Puhu
+                      </button>
+                      <button className="practice-btn game" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'game'); }} type="button">
+                        🎮 Testaa
+                      </button>
+                    </div>
+                  </div>
+                  {!isBaseWord && (
+                    <div className="action-section">
+                      <button className="action-btn edit" onClick={(e) => { e.stopPropagation(); onEdit(word); }} type="button">
+                        ✏️ Muokkaa
+                      </button>
+                      <button className="action-btn delete" onClick={(e) => { e.stopPropagation(); onDelete(word.id); }} type="button">
+                        🗑️ Poista
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              <div className="word-achievement">
-                <AchievementBadge 
-                  progress={progress}
-                  wordId={word.id}
-                  onCompleteStep={(step) => completeStep(word.id, step)}
-                />
-              </div>
-            </li>
+              {/* Expand Indicator */}
+              <div className="expand-indicator">{isExpanded ? '▲' : '▼'}</div>
+            </Card>
           );
         })}
-      </ul>
+      </div>
     </div>
-  );
-}
-
-function highlightWord(sentence, word) {
-  if (!sentence || !word) return sentence;
-  const regex = new RegExp(`(${word})`, 'gi');
-  const parts = sentence.split(regex);
-  return parts.map((part, i) => 
-    part.toLowerCase() === word.toLowerCase() ? (
-      <span key={`hl-${i}-${Date.now()}`} className="word-highlight">{part}</span>
-    ) : part
   );
 }

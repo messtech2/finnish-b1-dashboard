@@ -1,0 +1,376 @@
+.vocab-list {
+  width: 100%;
+}
+
+.vocab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.vocab-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.vocab-count {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.vocab-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Vocabulary Card */
+.vocab-card {
+  position: relative;
+  padding: 20px;
+  padding-left: 24px;
+  overflow: hidden;
+}
+
+.vocab-card.active {
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+}
+
+/* Progress Indicator (Left Border) */
+.card-progress-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transition: background 0.3s ease;
+}
+
+/* Sentence Section */
+.vocab-sentence {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.audio-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.audio-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.audio-btn.playing {
+  background: var(--error);
+  animation: pulse-audio 1s infinite;
+}
+
+@keyframes pulse-audio {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+}
+
+.sentence-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sentence-text {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.sentence-translation {
+  margin: 8px 0 0 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  animation: fadeIn 0.3s ease;
+}
+
+.translate-btn {
+  background: #f0f4ff;
+  color: var(--primary);
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.translate-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Word Section */
+.vocab-word {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.word-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.word-finnish {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.word-meaning {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.word-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-badge {
+  background: #e8f4fd;
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* SRS Dots */
+.srs-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.srs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  transition: background 0.3s ease;
+}
+
+.srs-dot.filled {
+  background: var(--primary);
+}
+
+.mastered-badge {
+  font-size: 1.2rem;
+  cursor: help;
+}
+
+/* Expanded Actions */
+.vocab-actions {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed #e0e0e0;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.practice-section,
+.action-section {
+  margin-bottom: 16px;
+}
+
+.practice-section:last-child,
+.action-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.practice-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.practice-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.practice-btn.read {
+  background: #e8f4fd;
+  color: var(--primary);
+}
+
+.practice-btn.read:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.practice-btn.speak {
+  background: #f0e8fd;
+  color: #764ba2;
+}
+
+.practice-btn.speak:hover {
+  background: #764ba2;
+  color: white;
+}
+
+.practice-btn.game {
+  background: #fff4e6;
+  color: #e67e22;
+}
+
+.practice-btn.game:hover {
+  background: #e67e22;
+  color: white;
+}
+
+.action-section {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn.edit {
+  background: #e8f4fd;
+  color: var(--primary);
+}
+
+.action-btn.edit:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.action-btn.delete {
+  background: #fde8e8;
+  color: var(--error);
+}
+
+.action-btn.delete:hover {
+  background: var(--error);
+  color: white;
+}
+
+/* Expand Indicator */
+.expand-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: #ccc;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.vocab-card.expanded .expand-indicator {
+  transform: rotate(180deg);
+}
+
+/* Empty State */
+.vocab-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.vocab-empty h3 {
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+}
+
+.vocab-empty p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+  .vocab-card {
+    padding: 16px;
+    padding-left: 20px;
+  }
+  
+  .sentence-text {
+    font-size: 1.15rem;
+  }
+  
+  .audio-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .practice-buttons {
+    flex-direction: column;
+  }
+  
+  .practice-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

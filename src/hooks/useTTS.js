@@ -2,12 +2,13 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 
 export function useTTS() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [currentWordId, setCurrentWordId] = useState(null); // Track which word is playing
   const audioRef = useRef(null);
   const utteranceRef = useRef(null);
   const voicesRef = useRef([]);
   const voicesLoadedRef = useRef(false);
 
-  // Load voices on mount (Chrome/Edge need this)
+  // Load voices on mount
   useEffect(() => {
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices();
@@ -17,13 +18,10 @@ export function useTTS() {
       }
     };
 
-    // Load immediately
     loadVoices();
 
-    // Listen for async voice loading (Chrome/Edge)
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
-      // Chrome sometimes needs a delay
       setTimeout(loadVoices, 200);
     }
 
@@ -32,12 +30,10 @@ export function useTTS() {
     };
   }, []);
 
-  // Get best Finnish voice from cached list
   const getFinnishVoice = useCallback(() => {
     const voices = voicesRef.current;
     if (!voices || voices.length === 0) return null;
     
-    // Priority: Google > Microsoft > Any Finnish
     return voices.find(v => 
       v.name.toLowerCase().includes('google') && v.lang.toLowerCase().startsWith('fi')
     ) || voices.find(v => 
@@ -49,11 +45,11 @@ export function useTTS() {
     ) || null;
   }, []);
 
-  const speak = useCallback((text, options = {}) => {
+  const speak = useCallback((text, options = {}, wordId = null) => {
     const textToSpeak = options.sentence || text;
     if (!textToSpeak) return;
 
-    // Stop any current speech cleanly
+    // Stop any current speech first
     if (utteranceRef.current) {
       window.speechSynthesis.cancel();
       utteranceRef.current = null;
@@ -63,67 +59,54 @@ export function useTTS() {
       audioRef.current = null;
     }
 
-    // Don't speak empty strings
     if (!textToSpeak.trim()) {
       setIsSpeaking(false);
+      setCurrentWordId(null);
       return;
     }
 
     setIsSpeaking(true);
+    setCurrentWordId(wordId);
 
-    // Use browser SpeechSynthesis (reliable, works offline)
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    
-    // Wait a bit for voices to load if needed
-    const speakAfterLoad = () => {
-      const finnishVoice = getFinnishVoice();
-      if (finnishVoice) {
-        utterance.voice = finnishVoice;
+    const finnishVoice = getFinnishVoice();
+    if (finnishVoice) {
+      utterance.voice = finnishVoice;
+    }
+
+    utterance.rate = 0.75;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setCurrentWordId(wordId);
+    };
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setCurrentWordId(null);
+      utteranceRef.current = null;
+    };
+    utterance.onerror = (event) => {
+      if (event.error !== 'canceled' && event.error !== 'interrupted') {
+        console.warn("Speech error:", event.error);
       }
-
-      // Optimized for Finnish pronunciation
-      utterance.rate = 0.75;    // Slower for long vowels
-      utterance.pitch = 1.0;    // Natural pitch
-      utterance.volume = 1.0;   // Full volume
-
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        utteranceRef.current = null;
-      };
-      utterance.onerror = (event) => {
-        // Only log actual errors, not "canceled"
-        if (event.error !== 'canceled' && event.error !== 'interrupted') {
-          console.warn("Speech synthesis error:", event.error);
-        }
-        setIsSpeaking(false);
-        utteranceRef.current = null;
-      };
-
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(false);
+      setCurrentWordId(null);
+      utteranceRef.current = null;
     };
 
-    // If voices loaded, speak immediately; otherwise wait briefly
-    if (voicesLoadedRef.current) {
-      speakAfterLoad();
-    } else {
-      // Wait up to 500ms for voices, then speak anyway
-      const checkInterval = setInterval(() => {
-        if (voicesLoadedRef.current) {
-          clearInterval(checkInterval);
-          speakAfterLoad();
-        }
-      }, 100);
-      
-      // Fallback: speak after 500ms even if voices not loaded
-      setTimeout(() => {
-        clearInterval(checkInterval);
-        if (!utteranceRef.current) {
-          speakAfterLoad();
-        }
-      }, 500);
-    }
+    utteranceRef.current = utterance;
+    
+    setTimeout(() => {
+      try {
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.warn("Speak failed:", e);
+        setIsSpeaking(false);
+        setCurrentWordId(null);
+      }
+    }, 50);
   }, [getFinnishVoice]);
 
   const stop = useCallback(() => {
@@ -136,7 +119,14 @@ export function useTTS() {
       audioRef.current = null;
     }
     setIsSpeaking(false);
+    setCurrentWordId(null);
   }, []);
 
-  return { speak, stop, isSpeaking };
+  return { 
+    speak, 
+    stop, 
+    isSpeaking, 
+    currentWordId,  // ✅ Expose which word is playing
+    isWordPlaying: (wordId) => currentWordId === wordId  // ✅ Helper function
+  };
 }

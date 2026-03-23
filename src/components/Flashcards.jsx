@@ -1,145 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
-import usePronunciation from '../hooks/usePronunciation';
-import PronunciationFeedback from './PronunciationFeedback';
+import { usePronunciation } from '../hooks/usePronunciation';
+import Card from './ui/Card';
+import './Flashcards.css';
 
-export default function Flashcards({ words, showEnglish = false }) {
+export default function Flashcards({ words, activeWordId, setActiveWordId, onCompletePracticeStep }) {
   const { speak, isSpeaking } = useTTS();
   const { startListening, listening, result, resetResult } = usePronunciation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showPronunciation, setShowPronunciation] = useState(false);
   const [hideWord, setHideWord] = useState(true);
-
-  if (words.length === 0) return <div className="card-placeholder">Lisää sanoja harjoitteluun!</div>;
+  const [practiceCompleted, setPracticeCompleted] = useState(false);
 
   const currentWord = words[currentIndex];
 
-  const handleSpeak = () => {
-    speak(currentWord.word, { sentence: currentWord.example });
-  };
-
-  const handlePronunciation = () => {
-    setShowPronunciation(true);
-    startListening(currentWord.example || currentWord.word);
-  };
+  useEffect(() => { currentWord?.id && setActiveWordId?.(currentWord.id); }, [currentWord, setActiveWordId]);
 
   const handleNext = () => {
+    if (practiceCompleted && currentWord?.id) onCompletePracticeStep?.(currentWord.id);
     setIsFlipped(false);
-    setShowPronunciation(false);
     resetResult();
     setHideWord(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % words.length);
-    }, 200);
+    setPracticeCompleted(false);
+    setTimeout(() => setCurrentIndex((prev) => (prev + 1) % words.length), 200);
   };
 
-  const handlePrev = () => {
-    setIsFlipped(false);
-    setShowPronunciation(false);
-    resetResult();
-    setHideWord(true);
-    setCurrentIndex((prev) => (prev - 1 + words.length) % words.length);
-  };
+  const createBlank = (sentence, word) => sentence?.replace(new RegExp(word, 'gi'), '______');
 
-  const createBlankSentence = (sentence, word) => {
-    if (!sentence || !word) return sentence;
-    const regex = new RegExp(word, 'gi');
-    return sentence.replace(regex, '______');
-  };
+  if (!words.length) return <Card className="flashcards-empty"><p>Lisää sanoja harjoitteluun!</p></Card>;
 
   return (
-    <div className="flashcard-container">
-      <div className="flashcard-mode-toggle">
-        <button 
-          className={`mode-btn ${hideWord ? 'active' : ''}`}
-          onClick={() => setHideWord(true)}
-          title="Piilota sana (aktiivinen muistaminen)"
-        >
-          🧠 Piilota sana
-        </button>
-        <button 
-          className={`mode-btn ${!hideWord ? 'active' : ''}`}
-          onClick={() => setHideWord(false)}
-          title="Näytä sana"
-        >
-          👁️ Näytä sana
-        </button>
+    <div className="flashcards-container">
+      <div className="flashcard-controls">
+        <button className={`mode-btn ${hideWord ? 'active' : ''}`} onClick={() => setHideWord(true)} type="button">🧠 Piilota</button>
+        <button className={`mode-btn ${!hideWord ? 'active' : ''}`} onClick={() => setHideWord(false)} type="button">👁️ Näytä</button>
       </div>
 
-      <div 
-        className={`flashcard ${isFlipped ? 'flipped' : ''}`} 
-        onClick={() => setIsFlipped(!isFlipped)}
-      >
-        <div className="card-front">
-          <div className="sentence-front">
-            <p className="sentence-text">
-              {hideWord 
-                ? createBlankSentence(currentWord.example, currentWord.word)
-                : currentWord.example
-              }
-            </p>
-            <button 
-              className={`speaker-btn-card ${isSpeaking ? 'speaking' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSpeak();
-              }}
-              disabled={isSpeaking}
-              title="Kuuntele lause"
-            >
-              {isSpeaking ? '🔊' : '🔈'}
-            </button>
+      <div className="flashcard-wrapper">
+        <Card className={`flashcard ${isFlipped ? 'flipped' : ''}`} onClick={() => setIsFlipped(!isFlipped)}>
+          <div className="card-inner">
+            <div className="card-front">
+              <p className="sentence-text">{hideWord ? createBlank(currentWord.example, currentWord.word) : currentWord.example}</p>
+              <button className="audio-btn-small" onClick={(e) => { e.stopPropagation(); speak(currentWord.word, { sentence: currentWord.example }); }} disabled={isSpeaking} type="button">
+                {isSpeaking ? '🔊' : '🔈'}
+              </button>
+              {currentWord.exampleTranslation && <p className="sentence-translation">{currentWord.exampleTranslation}</p>}
+              <p className="flip-hint">Napauta kääntääksesi</p>
+            </div>
+            <div className="card-back">
+              <h2 className="word-text">{currentWord.word}</h2>
+              <p className="meaning-text">{currentWord.meaning}</p>
+              <button className="mic-btn" onClick={(e) => { e.stopPropagation(); startListening(currentWord.example || currentWord.word); }} disabled={listening} type="button">
+                {listening ? '🎤' : '🎙️'} Harjoittele
+              </button>
+            </div>
           </div>
-          
-          {showEnglish && currentWord.exampleTranslation && (
-            <p className="sentence-translation-hint">{currentWord.exampleTranslation}</p>
-          )}
-          
-          <p className="hint">(Napauta kääntääksesi)</p>
-        </div>
-
-        <div className="card-back">
-          <h2 className="word-back">{currentWord.word}</h2>
-          
-          {showEnglish && (
-            <>
-              <p className="meaning-back">{currentWord.meaning}</p>
-              <p className="translation-back">{currentWord.exampleTranslation}</p>
-            </>
-          )}
-          
-          <div className="card-actions-back">
-            <button 
-              className={`mic-btn-card ${listening ? 'listening' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePronunciation();
-              }}
-              disabled={listening}
-              title="Harjoittele lausumista"
-            >
-              {listening ? '🎤' : '🎙️'}
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {showPronunciation && (
-        <PronunciationFeedback 
-          result={result} 
-          onRetry={() => handlePronunciation()}
-        />
-      )}
-      
-      <div className="controls">
-        <button onClick={handlePrev}>← Edellinen</button>
-        <span>{currentIndex + 1} / {words.length}</span>
-        <button onClick={handleNext}>Seuraava →</button>
+        </Card>
       </div>
 
-      <div className="flashcard-stats">
-        <p className="stats-hint">💡 Vinkki: Yritä arvata sana ennen kuin käännät kortin!</p>
+      {result && <div className="pronunciation-result"><PronunciationFeedback result={result} onRetry={() => startListening(currentWord.example || currentWord.word)} /></div>}
+
+      <div className="practice-complete">
+        <button className={`complete-btn ${practiceCompleted ? 'done' : ''}`} onClick={() => setPracticeCompleted(true)} disabled={practiceCompleted} type="button">
+          {practiceCompleted ? '✅ Harjoiteltu' : '📝 Merkitse tehdyksi'}
+        </button>
+      </div>
+
+      <div className="card-navigation">
+        <button onClick={() => { setIsFlipped(false); setCurrentIndex((prev) => (prev - 1 + words.length) % words.length); }} className="nav-btn" type="button">← Edellinen</button>
+        <span className="card-counter">{currentIndex + 1} / {words.length}</span>
+        <button onClick={handleNext} className="nav-btn primary" type="button">Seuraava →</button>
       </div>
     </div>
   );

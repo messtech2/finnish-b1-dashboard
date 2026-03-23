@@ -2,7 +2,7 @@ export default function TranslationToggle({ showEnglish, onToggle }) {
   return (
     <div className="translation-toggle-container">
       <button
-        className="translation-toggle"
+        className={`translation-toggle ${showEnglish ? 'active' : ''}`}
         onClick={onToggle}
         title={showEnglish ? 'Piilota englanti (🙈)' : 'Näytä englanti (👁️)'}
         aria-label={showEnglish ? 'Hide English translations' : 'Show English translations'}

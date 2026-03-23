@@ -1,141 +1,61 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useTTS } from '../hooks/useTTS';
+import Card from './ui/Card';
+import './VocabularyGame.css';
 
-// ✅ Pure, deterministic shuffle function (defined OUTSIDE component)
-const deterministicShuffle = (array, seed) => {
-  if (!array || array.length === 0) return [];
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const hash = (seed + i) * 9301 + 49297;
-    const j = Math.abs(hash % (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+const generateOptions = (currentWord, allWords) => {
+  if (!currentWord || !allWords?.length) return [];
+  const correct = currentWord.meaning;
+  let pool = allWords.filter(w => w.meaning && w.meaning !== correct).map(w => w.meaning);
+  pool = [...new Set(pool)];
+  pool.sort(() => 0.5 - Math.random());
+  let wrong = pool.slice(0, 3);
+  while (wrong.length < 3) wrong.push(`Vaihtoehto ${wrong.length + 1}`);
+  return [correct, ...wrong].filter(Boolean).slice(0, 4).sort(() => 0.5 - Math.random());
 };
 
-// ✅ Pure function to generate exactly 4 options (with fallbacks)
-const generateOptionsArray = (correctWord, allWords) => {
-  if (!correctWord || !allWords || allWords.length < 4) {
-    // Fallback: generate placeholder options if not enough words
-    return [
-      correctWord.definition_fi || correctWord.meaning || 'Option 1',
-      'Vaihtoehto 2',
-      'Vaihtoehto 3',
-      'Vaihtoehto 4'
-    ].slice(0, 4);
-  }
-
-  // Get other words (exclude correct one)
-  const otherWords = allWords.filter(w => w.id !== correctWord.id);
-  
-  // Ensure we have at least 3 wrong options
-  let wrongOptions = [];
-  if (otherWords.length >= 3) {
-    const shuffledOthers = deterministicShuffle(otherWords, correctWord.id);
-    wrongOptions = shuffledOthers.slice(0, 3).map(w => w.definition_fi || w.meaning || 'Vaihtoehto');
-  } else {
-    // Not enough words - generate fallback options
-    wrongOptions = ['Vaihtoehto A', 'Vaihtoehto B', 'Vaihtoehto C'].slice(0, 3);
-  }
-
-  // Add correct answer
-  const correctOption = correctWord.definition_fi || correctWord.meaning || 'Oikea vastaus';
-  const allOptions = [...wrongOptions, correctOption];
-  
-  // Shuffle and return exactly 4
-  const shuffledOptions = deterministicShuffle(allOptions, correctWord.id + 1);
-  return shuffledOptions.slice(0, 4);
-};
-
-export default function VocabularyGame({ words, showEnglish = false, activeWordId, setActiveWordId, onCompleteGameStep }) {
+export default function VocabularyGame({ words, activeWordId, setActiveWordId, onCompleteGameStep }) {
   const { speak, isSpeaking } = useTTS();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [selected, setSelected] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
   const [roundComplete, setRoundComplete] = useState(false);
-  const [showTranslation, setShowTranslation] = useState(false);
   const [showExample, setShowExample] = useState(false);
-  const [answers, setAnswers] = useState([]);
   const [gameKey, setGameKey] = useState(0);
 
-  // ✅ DERIVE gameWords (pure, no setState)
   const gameWords = useMemo(() => {
     if (!words || words.length < 5) return [];
-    const shuffled = deterministicShuffle(words, gameKey);
-    return shuffled.slice(0, 5);
+    return [...words].sort(() => 0.5 - Math.random()).slice(0, 5);
   }, [words, gameKey]);
 
-  // ✅ DERIVE currentWord
-  const currentWord = gameWords.length > 0 && currentIndex < gameWords.length
-    ? gameWords[currentIndex]
-    : null;
+  const currentWord = gameWords[currentIndex];
+  const options = useMemo(() => generateOptions(currentWord, words), [currentWord, words]);
 
-  // ✅ DERIVE options - ALWAYS exactly 4 items
-  const options = useMemo(() => {
-    if (!currentWord || !gameWords || gameWords.length === 0) {
-      return ['Loading...', 'Loading...', 'Loading...', 'Loading...'];
-    }
-    const opts = generateOptionsArray(currentWord, gameWords);
-    // Ensure exactly 4 options with fallbacks
-    while (opts.length < 4) {
-      opts.push(`Vaihtoehto ${opts.length + 1}`);
-    }
-    return opts.slice(0, 4);
-  }, [currentWord, gameWords]);
+  useMemo(() => { currentWord?.id && setActiveWordId?.(currentWord.id); }, [currentWord, setActiveWordId]);
 
-  // Track active word for achievements
-  useMemo(() => {
-    if (currentWord?.id && setActiveWordId) {
-      setActiveWordId(currentWord.id);
-    }
-  }, [currentWord, setActiveWordId]);
-
-  // Guard: not enough words
   if (!words || words.length < 5) {
-    return (
-      <div className="game-container">
-        <p className="game-message">⚠️ Lisää vähintään 5 sanaa aloittaaksesi!</p>
-      </div>
-    );
+    return <Card className="game-empty"><p>⚠️ Lisää 5 sanaa aloittaaksesi!</p></Card>;
   }
 
-  if (gameWords.length === 0 || !currentWord) return null;
-
-  const handleSelectAnswer = (option) => {
-    if (selectedAnswer !== null) return;
-    setSelectedAnswer(option);
-    const correct = option === currentWord.definition_fi;
+  const handleSelect = (option) => {
+    if (selected !== null) return;
+    setSelected(option);
+    const correct = option === currentWord.meaning;
     setIsCorrect(correct);
-    if (correct) setScore(prev => prev + 1);
-    setAnswers(prev => [...prev, { word: currentWord, selected: option, correct }]);
+    if (correct) setScore(s => s + 1);
   };
 
   const handleNext = () => {
     if (currentIndex < 4) {
-      setCurrentIndex(prev => prev + 1);
-      setSelectedAnswer(null);
+      setCurrentIndex(i => i + 1);
+      setSelected(null);
       setIsCorrect(null);
-      setShowTranslation(false);
       setShowExample(false);
-      // Mark game step complete for current word
-      if (currentWord?.id && onCompleteGameStep) {
-        onCompleteGameStep(currentWord.id);
-      }
+      onCompleteGameStep?.(currentWord.id);
     } else {
-      // Mark all words in round as game-complete
-      if (onCompleteGameStep) {
-        gameWords.forEach(word => onCompleteGameStep(word.id));
-      }
+      onCompleteGameStep?.(currentWord.id);
       setRoundComplete(true);
-    }
-  };
-
-  const handleToggleTranslation = () => setShowTranslation(!showTranslation);
-  const handleToggleExample = () => setShowExample(!showExample);
-  const handleSpeak = () => {
-    if (currentWord) {
-      speak(currentWord.word, { sentence: currentWord.example });
     }
   };
 
@@ -144,117 +64,89 @@ export default function VocabularyGame({ words, showEnglish = false, activeWordI
     setCurrentIndex(0);
     setScore(0);
     setRoundComplete(false);
-    setSelectedAnswer(null);
+    setSelected(null);
     setIsCorrect(null);
-    setShowTranslation(false);
     setShowExample(false);
-    setAnswers([]);
   };
 
-  // Round complete screen
   if (roundComplete) {
     return (
-      <div className="game-container">
-        <h3>🎮 Sanavisailu</h3>
-        <div className="game-results">
-          <div className="score-display">
-            <span className="score-number">{score}</span>
-            <span className="score-total">/ 5</span>
-          </div>
-          <p className="result-message">
-            {score === 5 ? '🏆 Täydellinen! Perfect!' :
-             score >= 3 ? '👍 Hyvä! Good job!' : '💪 Harjoittele lisää!'}
-          </p>
-          <div className="answers-review">
-            <h4>📋 Your Answers:</h4>
-            {answers.map((answer, index) => (
-              <div key={index} className={`answer-item ${answer.correct ? 'correct' : 'incorrect'}`}>
-                <div className="answer-details">
-                  <span className="answer-finnish">{answer.word?.finnish || answer.word?.word}</span>
-                  <span className="answer-definition">→ {answer.word?.definition_fi}</span>
-                  <span className="answer-english">= {answer.word?.meaning}</span>
-                </div>
-                <span className="answer-result">{answer.correct ? '✅' : '❌'}</span>
-              </div>
-            ))}
-          </div>
-          <button onClick={startNewRound} className="game-btn">🔄 Play Again (New 5 Words)</button>
+      <Card className="game-results">
+        <h2>🎮 Tulos</h2>
+        <div className="score-display">
+          <span className="score-number">{score}</span>
+          <span className="score-total">/ 5</span>
         </div>
-      </div>
+        <p className="result-message">
+          {score === 5 ? '🏆 Täydellinen!' : score >= 3 ? '👍 Hyvä!' : '💪 Harjoittele lisää!'}
+        </p>
+        <button onClick={startNewRound} className="restart-btn">🔄 Pelaa uudelleen</button>
+      </Card>
     );
   }
 
-  // Main game screen
   return (
     <div className="game-container">
       <div className="game-header">
-        <div className="game-progress">Sana {currentIndex + 1} / 5 | Pisteet: {score}</div>
+        <span className="game-progress">Sana {currentIndex + 1} / 5</span>
+        <span className="game-score">Pisteet: {score}</span>
       </div>
-      <div className="game-card">
+
+      <Card className="game-card">
         <div className="question-section">
-          <div className="game-word">
-            <h2>{currentWord.finnish || currentWord.word}</h2>
-            <button className={`speaker-btn-game ${isSpeaking ? 'speaking' : ''}`} onClick={handleSpeak} disabled={isSpeaking} title="Kuuntele">
-              {isSpeaking ? '🔊' : '🔈'}
-            </button>
-          </div>
-          <p className="question-instruction">Valitse oikea määritelmä suomeksi:</p>
-        </div>
-        <div className="translation-section">
-          <button onClick={handleToggleTranslation} className="toggle-btn">
-            {showTranslation ? '🙈 Piilota käännös' : '👁️ Näytä käännös'}
+          <h2 className="question-word">{currentWord?.word}</h2>
+          <button className="audio-btn" onClick={() => speak(currentWord?.word)} disabled={isSpeaking} type="button">
+            {isSpeaking ? '🔊' : '🔈'}
           </button>
-          {showTranslation && showEnglish && currentWord.exampleTranslation && (
-            <div className="translation-content"><p className="translation-text"><strong>English:</strong> {currentWord.exampleTranslation}</p></div>
-          )}
         </div>
-        <div className="example-section">
-          <button onClick={handleToggleExample} className="toggle-btn secondary">
-            {showExample ? '📖 Piilota esimerkki' : '📖 Näytä esimerkki'}
-          </button>
-          {showExample && (
-            <div className="example-content">
-              <p className="example-finnish">"{currentWord.example}"</p>
-              {showEnglish && <p className="example-english">{currentWord.exampleTranslation}</p>}
-            </div>
-          )}
-        </div>
-        <div className="options-container">
-          <div className="options-grid">
-            {options.map((option, index) => {
-              // Skip empty options
-              if (!option || option.trim() === '') return null;
-              
-              let btnClass = 'option-btn';
-              if (selectedAnswer !== null) {
-                if (option === currentWord.definition_fi) btnClass += ' correct';
-                else if (option === selectedAnswer) btnClass += ' incorrect';
-              }
-              return (
-                <button key={index} className={btnClass} onClick={() => handleSelectAnswer(option)} disabled={selectedAnswer !== null}>
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        {selectedAnswer !== null && (
-          <div className={`game-result ${isCorrect ? 'correct' : 'incorrect'}`}>
-            <div className="result-icon">{isCorrect ? '✅' : '❌'}</div>
-            <div className="result-text">
-              <p className="result-status">{isCorrect ? 'Oikein! Correct!' : 'Väärin!'}</p>
-              {!isCorrect && <p className="correct-answer"><strong>Oikea:</strong> {currentWord.definition_fi}</p>}
-            </div>
+        <p className="question-instruction">Valitse oikea merkitys:</p>
+
+        {showExample && currentWord?.example && (
+          <div className="example-box">
+            <p>"{currentWord.example}"</p>
+            {currentWord.exampleTranslation && <p className="example-translation">{currentWord.exampleTranslation}</p>}
           </div>
         )}
+
+        <div className="options-grid">
+          {options.map((option, i) => {
+            let btnClass = 'option-btn';
+            if (selected !== null) {
+              if (option === currentWord.meaning) btnClass += ' correct';
+              else if (option === selected) btnClass += ' incorrect';
+            }
+            return (
+              <button
+                key={i}
+                className={btnClass}
+                onClick={() => handleSelect(option)}
+                disabled={selected !== null}
+                type="button"
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+
+        {selected !== null && (
+          <div className={`feedback ${isCorrect ? 'correct' : 'incorrect'} ${isCorrect ? 'animate-success' : 'animate-shake'}`}>
+            <span>{isCorrect ? '✅ Oikein!' : '❌ Väärin!'}</span>
+            {!isCorrect && <span>Oikea: {currentWord.meaning}</span>}
+          </div>
+        )}
+
         <div className="game-actions">
-          {selectedAnswer !== null && (
-            <button onClick={handleNext} className="game-btn">
-              {currentIndex < 4 ? 'Seuraava →' : 'Näytä tulokset 🏆'}
+          <button className="toggle-example-btn" onClick={() => setShowExample(!showExample)} type="button">
+            {showExample ? '📖 Piilota esimerkki' : '📖 Näytä esimerkki'}
+          </button>
+          {selected !== null && (
+            <button className="next-btn" onClick={handleNext} type="button">
+              {currentIndex < 4 ? 'Seuraava →' : 'Näytä tulos 🏆'}
             </button>
           )}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
