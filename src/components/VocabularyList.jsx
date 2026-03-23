@@ -57,7 +57,7 @@ export default function VocabularyList({
       </div>
       
       <div className="vocab-cards">
-        {words.map((word) => {
+        {words.map((word, index) => {
           const isBaseWord = baseIds?.includes(word.id);
           const srs = srsData[word.id] || { strength: 0 };
           const progress = getProgress(word.id);
@@ -67,7 +67,7 @@ export default function VocabularyList({
 
           return (
             <Card 
-              key={word.id}
+              key={`vocab-${word.id}-${index}`}
               className={`vocab-card ${isExpanded ? 'expanded' : ''} ${activeWordId === word.id ? 'active' : ''}`}
               onClick={() => toggleExpand(word.id)}
               hover={true}
@@ -114,8 +114,8 @@ export default function VocabularyList({
                   {word.category && <span className="category-badge">{word.category}</span>}
                   {srs.strength > 0 && (
                     <div className="srs-dots">
-                      {[1,2,3,4,5].map(i => (
-                        <span key={i} className={`srs-dot ${i <= srs.strength ? 'filled' : ''}`} />
+                      {[1,2,3,4,5].map((i) => (
+                        <span key={`dot-${word.id}-${i}`} className={`srs-dot ${i <= srs.strength ? 'filled' : ''}`} />
                       ))}
                     </div>
                   )}
