@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useTTS } from '../hooks/useTTS';
 
 // ✅ Pure, deterministic shuffle function (defined OUTSIDE component)
 const deterministicShuffle = (array, seed) => {
+  if (!array || array.length === 0) return [];
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const hash = (seed + i) * 9301 + 49297;
@@ -12,16 +13,41 @@ const deterministicShuffle = (array, seed) => {
   return shuffled;
 };
 
-// ✅ Pure function to generate options array (no side effects)
+// ✅ Pure function to generate exactly 4 options (with fallbacks)
 const generateOptionsArray = (correctWord, allWords) => {
+  if (!correctWord || !allWords || allWords.length < 4) {
+    // Fallback: generate placeholder options if not enough words
+    return [
+      correctWord.definition_fi || correctWord.meaning || 'Option 1',
+      'Vaihtoehto 2',
+      'Vaihtoehto 3',
+      'Vaihtoehto 4'
+    ].slice(0, 4);
+  }
+
+  // Get other words (exclude correct one)
   const otherWords = allWords.filter(w => w.id !== correctWord.id);
-  const shuffledOthers = deterministicShuffle(otherWords, correctWord.id);
-  const wrongOptions = shuffledOthers.slice(0, 3).map(w => w.definition_fi);
-  const allOptions = [...wrongOptions, correctWord.definition_fi];
-  return deterministicShuffle(allOptions, correctWord.id + 1);
+  
+  // Ensure we have at least 3 wrong options
+  let wrongOptions = [];
+  if (otherWords.length >= 3) {
+    const shuffledOthers = deterministicShuffle(otherWords, correctWord.id);
+    wrongOptions = shuffledOthers.slice(0, 3).map(w => w.definition_fi || w.meaning || 'Vaihtoehto');
+  } else {
+    // Not enough words - generate fallback options
+    wrongOptions = ['Vaihtoehto A', 'Vaihtoehto B', 'Vaihtoehto C'].slice(0, 3);
+  }
+
+  // Add correct answer
+  const correctOption = correctWord.definition_fi || correctWord.meaning || 'Oikea vastaus';
+  const allOptions = [...wrongOptions, correctOption];
+  
+  // Shuffle and return exactly 4
+  const shuffledOptions = deterministicShuffle(allOptions, correctWord.id + 1);
+  return shuffledOptions.slice(0, 4);
 };
 
-export default function VocabularyGame({ words, showEnglish = false }) {
+export default function VocabularyGame({ words, showEnglish = false, activeWordId, setActiveWordId, onCompleteGameStep }) {
   const { speak, isSpeaking } = useTTS();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -35,27 +61,40 @@ export default function VocabularyGame({ words, showEnglish = false }) {
 
   // ✅ DERIVE gameWords (pure, no setState)
   const gameWords = useMemo(() => {
-    if (words.length < 5) return [];
+    if (!words || words.length < 5) return [];
     const shuffled = deterministicShuffle(words, gameKey);
     return shuffled.slice(0, 5);
   }, [words, gameKey]);
 
-  // ✅ DERIVE currentWord (pure, no setState)
+  // ✅ DERIVE currentWord
   const currentWord = gameWords.length > 0 && currentIndex < gameWords.length
     ? gameWords[currentIndex]
     : null;
 
-  // ✅ DERIVE options from gameWords + currentIndex (pure, NO setState!)
+  // ✅ DERIVE options - ALWAYS exactly 4 items
   const options = useMemo(() => {
-    if (!currentWord || gameWords.length === 0) return [];
-    return generateOptionsArray(currentWord, gameWords);
+    if (!currentWord || !gameWords || gameWords.length === 0) {
+      return ['Loading...', 'Loading...', 'Loading...', 'Loading...'];
+    }
+    const opts = generateOptionsArray(currentWord, gameWords);
+    // Ensure exactly 4 options with fallbacks
+    while (opts.length < 4) {
+      opts.push(`Vaihtoehto ${opts.length + 1}`);
+    }
+    return opts.slice(0, 4);
   }, [currentWord, gameWords]);
 
+  // Track active word for achievements
+  useMemo(() => {
+    if (currentWord?.id && setActiveWordId) {
+      setActiveWordId(currentWord.id);
+    }
+  }, [currentWord, setActiveWordId]);
+
   // Guard: not enough words
-  if (words.length < 5) {
+  if (!words || words.length < 5) {
     return (
       <div className="game-container">
-        <h3>🎮 Sanavisailu</h3>
         <p className="game-message">⚠️ Lisää vähintään 5 sanaa aloittaaksesi!</p>
       </div>
     );
@@ -79,14 +118,26 @@ export default function VocabularyGame({ words, showEnglish = false }) {
       setIsCorrect(null);
       setShowTranslation(false);
       setShowExample(false);
+      // Mark game step complete for current word
+      if (currentWord?.id && onCompleteGameStep) {
+        onCompleteGameStep(currentWord.id);
+      }
     } else {
+      // Mark all words in round as game-complete
+      if (onCompleteGameStep) {
+        gameWords.forEach(word => onCompleteGameStep(word.id));
+      }
       setRoundComplete(true);
     }
   };
 
   const handleToggleTranslation = () => setShowTranslation(!showTranslation);
   const handleToggleExample = () => setShowExample(!showExample);
-  const handleSpeak = () => speak(currentWord.word, { sentence: currentWord.example });
+  const handleSpeak = () => {
+    if (currentWord) {
+      speak(currentWord.word, { sentence: currentWord.example });
+    }
+  };
 
   const startNewRound = () => {
     setGameKey(k => k + 1);
@@ -119,9 +170,9 @@ export default function VocabularyGame({ words, showEnglish = false }) {
             {answers.map((answer, index) => (
               <div key={index} className={`answer-item ${answer.correct ? 'correct' : 'incorrect'}`}>
                 <div className="answer-details">
-                  <span className="answer-finnish">{answer.word.finnish}</span>
-                  <span className="answer-definition">→ {answer.word.definition_fi}</span>
-                  <span className="answer-english">= {answer.word.meaning}</span>
+                  <span className="answer-finnish">{answer.word?.finnish || answer.word?.word}</span>
+                  <span className="answer-definition">→ {answer.word?.definition_fi}</span>
+                  <span className="answer-english">= {answer.word?.meaning}</span>
                 </div>
                 <span className="answer-result">{answer.correct ? '✅' : '❌'}</span>
               </div>
@@ -137,13 +188,12 @@ export default function VocabularyGame({ words, showEnglish = false }) {
   return (
     <div className="game-container">
       <div className="game-header">
-        <h3>🎮 Sanavisailu</h3>
         <div className="game-progress">Sana {currentIndex + 1} / 5 | Pisteet: {score}</div>
       </div>
       <div className="game-card">
         <div className="question-section">
           <div className="game-word">
-            <h2>{currentWord.finnish}</h2>
+            <h2>{currentWord.finnish || currentWord.word}</h2>
             <button className={`speaker-btn-game ${isSpeaking ? 'speaking' : ''}`} onClick={handleSpeak} disabled={isSpeaking} title="Kuuntele">
               {isSpeaking ? '🔊' : '🔈'}
             </button>
@@ -172,6 +222,9 @@ export default function VocabularyGame({ words, showEnglish = false }) {
         <div className="options-container">
           <div className="options-grid">
             {options.map((option, index) => {
+              // Skip empty options
+              if (!option || option.trim() === '') return null;
+              
               let btnClass = 'option-btn';
               if (selectedAnswer !== null) {
                 if (option === currentWord.definition_fi) btnClass += ' correct';

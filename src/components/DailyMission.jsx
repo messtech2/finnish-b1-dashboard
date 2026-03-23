@@ -2,7 +2,6 @@ import { useState, useMemo, useCallback } from 'react';
 import { useSRS } from '../hooks/useSRS';
 
 export default function DailyMission({ allWords }) {
-  // ✅ FIX: Only import what we use (NO updateStrength)
   const { getDueWords, srsData } = useSRS();
   const [completed, setCompleted] = useState({ new: 0, review: 0, speaking: 0 });
   const [showArchived, setShowArchived] = useState(false);
@@ -59,10 +58,12 @@ export default function DailyMission({ allWords }) {
     );
   }
 
-  const getStableKey = (word, index, prefix = '') => {
-    if (word?.id) return `${prefix}${word.id}`;
-    if (word?.word) return `${prefix}${word.word}-${index}`;
-    return `${prefix}item-${index}`;
+  // ✅ FIX: Create unique keys combining section + wordId + array index
+  const getUniqueKey = (word, section, index) => {
+    if (word?.id) {
+      return `${section}-${word.id}-idx${index}-${Date.now()}`;
+    }
+    return `${section}-${index}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   };
 
   return (
@@ -107,7 +108,7 @@ export default function DailyMission({ allWords }) {
             <h4>📚 Uudet sanat</h4>
             <ul>
               {mission.new.slice(0, 5).map((word, index) => (
-                <li key={getStableKey(word, index, 'new-')} className="task-item">
+                <li key={getUniqueKey(word, 'new', index)} className="task-item">
                   <span>{word?.word}</span>
                   <button className="complete-btn" onClick={() => word?.id && handleComplete('new', word.id)}>✅</button>
                 </li>
@@ -120,7 +121,7 @@ export default function DailyMission({ allWords }) {
             <h4>🔄 Kertaus</h4>
             <ul>
               {mission.review.slice(0, 5).map((word, index) => (
-                <li key={getStableKey(word, index, 'review-')} className="task-item">
+                <li key={getUniqueKey(word, 'review', index)} className="task-item">
                   <span>{word?.word}</span>
                   <button className="complete-btn" onClick={() => word?.id && handleComplete('review', word.id)}>✅</button>
                 </li>
@@ -133,7 +134,7 @@ export default function DailyMission({ allWords }) {
             <h4>🗣️ Puhuminen</h4>
             <ul>
               {mission.speaking.slice(0, 5).map((word, index) => (
-                <li key={getStableKey(word, index, 'speaking-')} className="task-item">
+                <li key={getUniqueKey(word, 'speaking', index)} className="task-item">
                   <span>{word?.word}</span>
                   <button className="complete-btn" onClick={() => word?.id && handleComplete('speaking', word.id)}>✅</button>
                 </li>
@@ -151,8 +152,8 @@ export default function DailyMission({ allWords }) {
           <h4>🗄️ Varastoidut ({archivedWords.length})</h4>
           <p className="archived-hint">Nämä sanat on hallittu (vahvuus ≥ 4). Napauta palauttaaksesi aktiiviseen harjoitteluun.</p>
           <div className="archived-grid">
-            {archivedWords.slice(0, 20).map(word => (
-              <button key={word.id} className="archived-word-btn" title="Palauta harjoitteluun">
+            {archivedWords.slice(0, 20).map((word, index) => (
+              <button key={`archived-${word.id}-${index}`} className="archived-word-btn" title="Palauta harjoitteluun">
                 {word.word}
               </button>
             ))}

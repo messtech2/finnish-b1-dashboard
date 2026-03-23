@@ -2367,3 +2367,365 @@ button:disabled {
 
 /* ========== IMPROVE TTS AUDIO QUALITY ========== */
 /* No CSS needed - see useTTS.js fix below */
+/* ========== TRANSLATION TOGGLE - MAKE IT VISIBLE ========== */
+.header-actions {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.translation-toggle-container {
+  display: inline-block;
+}
+
+.translation-toggle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.translation-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.translation-toggle:active {
+  transform: translateY(0);
+}
+
+.toggle-icon {
+  font-size: 1.3rem;
+}
+
+.toggle-text {
+  font-weight: 600;
+}
+
+/* Ensure English translations are visible when toggled */
+.example-translation,
+.word-meaning,
+.sentence-translation-hint,
+.meaning-back,
+.translation-back,
+.question-translation-hint,
+.sentence-translation,
+.prompt-translation,
+.text-translation {
+  display: block;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* Hide English by default (when showEnglish = false) */
+.vocab-item:not(.show-english) .example-translation,
+.vocab-item:not(.show-english) .word-meaning,
+.flashcard:not(.show-english) .sentence-translation-hint,
+.flashcard:not(.show-english) .meaning-back,
+.flashcard:not(.show-english) .translation-back {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .translation-toggle {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .toggle-text {
+    display: none; /* Show only icon on small screens */
+  }
+  
+  .toggle-icon {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========== FIX EMPTY OPTION BUTTONS ========== */
+.option-btn:empty,
+.option-btn:not([data-content]) {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa !important;
+  color: #999 !important;
+  cursor: not-allowed;
+}
+
+.option-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ensure options grid always shows 4 buttons */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  min-height: 280px; /* Ensure space for 4 buttons */
+}
+
+@media (min-width: 500px) {
+  .options-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Loading state for options */
+.option-btn.loading {
+  background: #e8f4fd !important;
+  color: #666 !important;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ========== BULK IMPORT STYLES ========== */
+.bulk-import {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.import-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border);
+}
+
+.import-header h3 {
+  margin: 0;
+  color: var(--primary);
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.import-instructions {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.import-instructions p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.import-instructions ul {
+  margin: 0 0 15px 0;
+  padding-left: 20px;
+}
+
+.import-instructions li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.template-btn {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.template-btn:hover {
+  background: #138496;
+}
+
+.json-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.json-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  border-left: 4px solid #dc3545;
+}
+
+.preview-section {
+  margin: 15px 0;
+  padding: 15px;
+  background: #e8f4fd;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary);
+}
+
+.preview-section h4 {
+  margin: 0 0 10px 0;
+  color: var(--primary);
+}
+
+.preview-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.preview-item {
+  padding: 8px;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-category {
+  background: #6c757d;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.preview-more {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin: 10px 0 0 0;
+}
+
+.import-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.preview-btn,
+.import-submit-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.preview-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.preview-btn:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.import-submit-btn {
+  background: #28a745;
+  color: white;
+}
+
+.import-submit-btn:hover:not(:disabled) {
+  background: #218838;
+}
+
+.preview-btn:disabled,
+.import-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .bulk-import {
+    padding: 15px;
+  }
+  
+  .import-actions {
+    flex-direction: column;
+  }
+  
+  .preview-btn,
+  .import-submit-btn {
+    width: 100%;
+  }
+}
+
+/* ========== GITHUB UPDATE BUTTON ========== */
+.github-update-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  transition: all 0.2s;
+  animation: pulse-new 2s infinite;
+}
+
+.github-update-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+@keyframes pulse-new {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.data-btn.refresh {
+  background: #17a2b8;
+  color: white;
+}
+
+.data-btn.refresh:hover {
+  background: #138496;
+}

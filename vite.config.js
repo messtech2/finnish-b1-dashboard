@@ -43,5 +43,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json}'],
       }
     })
-  ]
+  ],
+  server: {
+    hmr: {
+      overlay: false, // Suppress error overlay (optional)
+    },
+  },
 })
