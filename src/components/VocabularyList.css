@@ -374,3 +374,246 @@
     text-align: center;
   }
 }
+
+/* ========== PRACTICE BUTTONS - WORKING STATES ========== */
+.practice-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.practice-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.practice-btn.read {
+  background: #e8f4fd;
+  color: var(--primary);
+}
+
+.practice-btn.read:hover:not(:disabled) {
+  background: var(--primary);
+  color: white;
+}
+
+.practice-btn.speak {
+  background: #f0e8fd;
+  color: #764ba2;
+}
+
+.practice-btn.speak:hover:not(:disabled) {
+  background: #764ba2;
+  color: white;
+}
+
+.practice-btn.game {
+  background: #fff4e6;
+  color: #e67e22;
+}
+
+.practice-btn.game:hover:not(:disabled) {
+  background: #e67e22;
+  color: white;
+}
+
+/* Completed state */
+.practice-btn.completed {
+  background: #d4edda !important;
+  color: #155724 !important;
+  cursor: default;
+  opacity: 1;
+}
+
+.practice-btn.completed:hover {
+  transform: none;
+}
+
+.practice-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* Just completed animation */
+.practice-btn:not(.completed) {
+  animation: none;
+}
+
+.practice-btn:not(.completed):active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .practice-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ========== PRACTICE BUTTONS - ALWAYS CLICKABLE ========== */
+.practice-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.practice-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;  /* ✅ Always show pointer */
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 110px;
+  justify-content: center;
+  background: white;
+  border: 2px solid var(--border);
+  color: var(--text-primary);
+}
+
+.practice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.practice-btn.read {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.practice-btn.read:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.practice-btn.speak {
+  border-color: #764ba2;
+  color: #764ba2;
+}
+
+.practice-btn.speak:hover {
+  background: #764ba2;
+  color: white;
+}
+
+.practice-btn.game {
+  border-color: #e67e22;
+  color: #e67e22;
+}
+
+.practice-btn.game:hover {
+  background: #e67e22;
+  color: white;
+}
+
+/* Done state - still clickable, just styled differently */
+.practice-btn.done {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  cursor: pointer;  /* ✅ Still clickable even when "done" */
+}
+
+.practice-btn.done:hover {
+  background: #28a745;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Ensure buttons are never disabled visually */
+.practice-btn:disabled {
+  opacity: 1;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .practice-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ========== CLEAN CARD UX ========== */
+.vocab-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.vocab-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.vocab-card.open {
+  background: #f8fafc;
+  border-left: 4px solid var(--primary);
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.practice-btn {
+  padding: 8px 14px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.practice-btn.read { border-color: var(--primary); color: var(--primary); }
+.practice-btn.read:hover { background: var(--primary); color: white; }
+
+.practice-btn.speak { border-color: #764ba2; color: #764ba2; }
+.practice-btn.speak:hover { background: #764ba2; color: white; }
+
+.practice-btn.game { border-color: #e67e22; color: #e67e22; }
+.practice-btn.game:hover { background: #e67e22; color: white; }
+
+.practice-btn.done {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+  cursor: default;
+}
+
+.action-btn {
+  padding: 8px 12px;
+  border: 2px solid var(--error);
+  border-radius: 8px;
+  background: white;
+  color: var(--error);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: var(--error);
+  color: white;
+}
