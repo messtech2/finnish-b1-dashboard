@@ -27,6 +27,89 @@
       "usedInExam": false,
       "source": "github",
       "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+  "lastUpdated": "2026-01-15T00:00:00.000Z",
+  "texts": [
+    {
+      "id": "reading-001",
+      "title": "Kirjasto on kiva paikka",
+      "level": "B1",
+      "text": "Oletko käynyt kotipaikkakuntasi kirjastossa? Tiedätkö, mitä kirjastossa tehdään? Kirjastosta voi lainata kirjoja, CD-levyjä, DVD-elokuvia ja lehtiä. Joistakin kirjastoista voi jopa lainata tavaroita, kuten ompelukoneita, kitaroita, porakoneita ja ulkopelejä! Kirjasto on monille ihmisille kuin toinen olohuone. He viettävät siellä aikaansa, lukevat, opiskelevat tai työskentelevät. Siellä voi käyttää myös tietokonetta ja internetiä. Kirjastossa on myös erilaisia tapahtumia. Siellä voi kokoontua lukupiiri. Joissakin kirjastoissa järjestetään suomen kielen keskustelukerhoja maahanmuuttajille. Joissakin kirjastoissa lapset voivat osallistua koulun jälkeen läksykerhoon. Siellä joku aikuinen auttaa lapsia läksyjen tekemisessä. Jos haluat lainata kirjastosta jotain kotiin, tarvitset kirjastokortin. Se ei maksa mitään. Voit kysyä sitä kirjaston henkilökunnalta. Ota silloin mukaan henkilöllisyystodistus.",
+      "translation": "Have you visited your hometown library? Do you know what is done in a library? You can borrow books, CDs, DVD movies and magazines from the library. From some libraries you can even borrow items like sewing machines, guitars, drills and outdoor games! For many people, the library is like a second living room. They spend time there, reading, studying or working. You can also use computers and the internet there. The library also has various events. Reading circles can meet there. In some libraries, Finnish language discussion clubs are organized for immigrants. In some libraries, children can participate in homework clubs after school. There, an adult helps children with their homework. If you want to borrow something from the library to take home, you need a library card. It doesn't cost anything. You can ask for it from the library staff. Then bring your ID document.",
+      "keywords": [
+        "lainata",
+        "ompelukone",
+        "porakone",
+        "olohuone",
+        "viettää",
+        "työskennellä",
+        "tietokone",
+        "tapahtuma",
+        "lukupiiri",
+        "keskustelukerho"
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Mitä kirjastosta voi lainata?",
+          "options": [
+            "Vain kirjoja",
+            "Kirjoja, levyjä, elokuvia ja jopa tavaroita",
+            "Vain lehtiä",
+            "Vain tietokoneita"
+          ],
+          "correct": 1,
+          "explanation": "Tekstissä: 'Kirjastosta voi lainata kirjoja, CD-levyjä, DVD-elokuvia ja lehtiä. Joistakin kirjastoista voi jopa lainata tavaroita...'"
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "Kirjastokortti maksaa 10 euroa.",
+          "correct": false,
+          "explanation": "Tekstissä: 'Se ei maksa mitään.'"
+        },
+        {
+          "id": "q3",
+          "type": "multiple-choice",
+          "question": "Mitä kirjastossa voi tehdä?",
+          "options": [
+            "Vain lainata kirjoja",
+            "Lukea, opiskella, työskennellä ja osallistua tapahtumiin",
+            "Vain käyttää internetiä",
+            "Vain käydä lukupiirissä"
+          ],
+          "correct": 1,
+          "explanation": "Tekstissä: 'He viettävät siellä aikaansa, lukevat, opiskelevat tai työskentelevät.'"
+        },
+        {
+          "id": "q4",
+          "type": "true-false",
+          "question": "Joissakin kirjastoissa on suomen kielen keskustelukerhoja.",
+          "correct": true,
+          "explanation": "Tekstissä: 'Joissakin kirjastoissa järjestetään suomen kielen keskustelukerhoja maahanmuuttajille.'"
+        },
+        {
+          "id": "q5",
+          "type": "multiple-choice",
+          "question": "Mitä tarvitset lainataksesi kirjastosta?",
+          "options": [
+            "Rahaa",
+            "Kirjastokortin ja henkilöllisyystodistuksen",
+            "Vain nimen",
+            "Ei mitään"
+          ],
+          "correct": 1,
+          "explanation": "Tekstissä: 'tarvitset kirjastokortin... Ota silloin mukaan henkilöllisyystodistus.'"
+        }
+      ],
+      "state": "new",
+      "usedInExam": false,
+      "source": "user",
+      "createdAt": "2026-01-15T00:00:00.000Z"
     }
+  ]
+}
   ]
 }
