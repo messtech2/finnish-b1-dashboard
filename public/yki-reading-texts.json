@@ -1,0 +1,32 @@
+{
+  "lastUpdated": "2026-01-01T00:00:00.000Z",
+  "texts": [
+    {
+      "id": "reading-001",
+      "title": "Asunnon etsiminen",
+      "level": "B1",
+      "text": "Etsin uutta asuntoa Helsingin keskustasta. Haluan yksiön, jossa on keittiö ja oma sauna. Vuokra saa olla enintään 800 euroa kuukaudessa. Olen yhteydessä välittäjiin ja katselen ilmoituksia netistä. Toivon, että löydän sopivan asunnon ennen kuun vaihtumista.",
+      "translation": "I am looking for a new apartment in Helsinki center. I want a one-room apartment with kitchen and sauna. Rent max 800 euros per month.",
+      "keywords": ["asunto", "vuokra", "yksiö", "sauna", "välittäjä"],
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Mitä henkilö etsii?",
+          "options": ["Taloa", "Yksiötä", "Kaksiota", "Mökkiä"],
+          "correct": 1
+        },
+        {
+          "id": "q2",
+          "type": "true-false",
+          "question": "Vuokra saa olla yli 1000 euroa.",
+          "correct": false
+        }
+      ],
+      "state": "new",
+      "usedInExam": false,
+      "source": "github",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ]
+}
