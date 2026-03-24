@@ -1,64 +1,169 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
+import { usePronunciation } from '../hooks/usePronunciation';
+import Card from './ui/Card';
+import PronunciationFeedback from './PronunciationFeedback';
+import './SpeakingPractice.css';
 
-const B1_PROMPTS = [
-  "Miksi opiskelet suomea?",
-  "Kerro tärkeästä kokemuksesta viime vuonna.",
-  "Mitä aiot tehdä seuraavien kuuden kuukauden aikana?",
-  "Mitä teet vapaa-ajalla?",
-  "Kerro päivästäsi eilen.",
-  "Mikä on lempiruokasi ja miksi?",
-  "Kuvaile asuinympäristöäsi.",
-  "Mitä mieltä olet somesta?"
+const SPEAKING_PROMPTS = [
+  {
+    id: 1,
+    main: "Kerro kokemuksesta, joka oli sinulle tärkeä.",
+    followUps: ["Miksi tämä kokemus oli merkittävä?", "Miten se vaikutti elämääsi?"],
+    timeGuidance: "Yritä puhua 1–2 minuuttia. Käytä esimerkkejä ja mielipiteitä."
+  },
+  {
+    id: 2,
+    main: "Kuvaile tavallinen päiväsi.",
+    followUps: ["Mikä on päivän paras hetki?", "Mitä haluaisit muuttaa rutiineissasi?"],
+    timeGuidance: "Yritä puhua 1–2 minuuttia. Käytä esimerkkejä ja mielipiteitä."
+  },
+  {
+    id: 3,
+    main: "Mitä aiot tehdä seuraavien kuuden kuukauden aikana?",
+    followUps: ["Mitkä ovat tärkeimmät tavoitteesi?", "Miten aiot saavuttaa ne?"],
+    timeGuidance: "Yritä puhua 1–2 minuuttia. Käytä esimerkkejä ja mielipiteitä."
+  },
+  {
+    id: 4,
+    main: "Miksi suomen kieli on tärkeä sinulle?",
+    followUps: ["Miten kielen oppiminen on muuttanut elämääsi?", "Mitä haasteita olet kohdannut?"],
+    timeGuidance: "Yritä puhua 1–2 minuuttia. Käytä esimerkkejä ja mielipiteitä."
+  },
+  {
+    id: 5,
+    main: "Kerro työstäsi tai opinnoistasi.",
+    followUps: ["Mikä on mielenkiintoisinta työssäsi/opinnoissasi?", "Mitä haluat tehdä tulevaisuudessa?"],
+    timeGuidance: "Yritä puhua 2–3 minuuttia. Käytä esimerkkejä ja mielipiteitä."
+  }
 ];
 
-// English translations for prompts (optional hints)
-const PROMPT_TRANSLATIONS = {
-  "Miksi opiskelet suomea?": "Why are you studying Finnish?",
-  "Kerro tärkeästä kokemuksesta viime vuonna.": "Tell about an important experience last year.",
-  "Mitä aiot tehdä seuraavien kuuden kuukauden aikana?": "What are you going to do in the next six months?",
-  "Mitä teet vapaa-ajalla?": "What do you do in your free time?",
-  "Kerro päivästäsi eilen.": "Tell about your day yesterday.",
-  "Mikä on lempiruokasi ja miksi?": "What is your favorite food and why?",
-  "Kuvaile asuinympäristöäsi.": "Describe your living environment.",
-  "Mitä mieltä olet somesta?": "What do you think about social media?"
-};
+export default function SpeakingPractice() {
+  const { speak, pause, resume, stop, isPlaying, isPaused } = useTTS();
+  const { startListening, listening, result, resetResult } = usePronunciation();
+  const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
+  const [showFollowUps, setShowFollowUps] = useState(false);
+  const [audioActive, setAudioActive] = useState(false);
 
-export default function SpeakingPractice({ showEnglish = false }) {
-  const { speak, isSpeaking } = useTTS();
-  const [currentPrompt, setCurrentPrompt] = useState(B1_PROMPTS[0]);
+  const currentPrompt = SPEAKING_PROMPTS[currentPromptIndex];
 
-  const handleSpeak = () => {
-    speak(currentPrompt, { rate: 0.8, pitch: 1.0 });
+  const handlePlayPause = () => {
+    if (!currentPrompt?.main) return;
+    
+    if (isPlaying) {
+      pause();
+    } else if (isPaused) {
+      resume();
+    } else {
+      setAudioActive(true);
+      speak(currentPrompt.main);
+    }
   };
 
-  const generateNew = () => {
-    const randomIndex = Math.floor(Math.random() * B1_PROMPTS.length);
-    setCurrentPrompt(B1_PROMPTS[randomIndex]);
+  const handleStop = () => {
+    stop();
+    setAudioActive(false);
   };
+
+  const handlePronunciation = () => {
+    startListening(currentPrompt.main);
+  };
+
+  const handleNextPrompt = () => {
+    stop();
+    setAudioActive(false);
+    resetResult();
+    setShowFollowUps(false);
+    setCurrentPromptIndex((prev) => (prev + 1) % SPEAKING_PROMPTS.length);
+  };
+
+  const handlePrevPrompt = () => {
+    stop();
+    setAudioActive(false);
+    resetResult();
+    setShowFollowUps(false);
+    setCurrentPromptIndex((prev) => (prev - 1 + SPEAKING_PROMPTS.length) % SPEAKING_PROMPTS.length);
+  };
+
+  // ✅ Controls always visible when audio has been activated
+  const showControls = audioActive || isPlaying || isPaused;
 
   return (
-    <div className="speaking-section">
-      <h3>🗣️ Speaking Practice (B1 Level)</h3>
-      <div className="prompt-box">
-        <p className="prompt-finnish">{currentPrompt}</p>
-        
-        {/* English translation - TOGGLEABLE */}
-        {showEnglish && PROMPT_TRANSLATIONS[currentPrompt] && (
-          <p className="prompt-translation">{PROMPT_TRANSLATIONS[currentPrompt]}</p>
-        )}
-        
+    <Card className="speaking-practice">
+      <div className="speaking-header">
+        <h3>🗣️ Puhumisharjoitus</h3>
+        <span className="prompt-counter">{currentPromptIndex + 1} / {SPEAKING_PROMPTS.length}</span>
+      </div>
+
+      <div className="prompt-section">
+        <div className="prompt-main">
+          <p className="prompt-text">{currentPrompt.main}</p>
+          {/* ✅ ALWAYS VISIBLE Audio Controls */}
+          <div className="audio-controls-compact">
+            <button 
+              className={`audio-btn-small ${isPlaying ? 'playing' : ''}`}
+              onClick={handlePlayPause}
+              title={isPlaying ? 'Tauko' : isPaused ? 'Jatka' : 'Kuuntele'}
+              type="button"
+            >
+              {isPlaying ? '⏸️' : isPaused ? '▶️' : '🔈'}
+            </button>
+            {showControls && (
+              <button 
+                className="audio-btn-small stop"
+                onClick={handleStop}
+                title="Pysäytä"
+                type="button"
+              >
+                ⏹️
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="time-guidance">
+          <span>⏱️ {currentPrompt.timeGuidance}</span>
+        </div>
+
+        <div className="followups-section">
+          <button 
+            className="toggle-followups"
+            onClick={() => setShowFollowUps(!showFollowUps)}
+            type="button"
+          >
+            {showFollowUps ? '🔽 Piilota jatkokysymykset' : '🔽 Näytä jatkokysymykset'}
+          </button>
+          
+          {showFollowUps && (
+            <div className="followups-list">
+              {currentPrompt.followUps.map((followUp, index) => (
+                <div key={index} className="followup-item">
+                  <span className="followup-icon">💭</span>
+                  <span className="followup-text">{followUp}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="speaking-actions">
         <button 
-          className={`speaker-btn-small ${isSpeaking ? 'speaking' : ''}`}
-          onClick={handleSpeak}
-          disabled={isSpeaking}
-          title="Kuuntele kysymys"
+          className={`mic-btn ${listening ? 'listening' : ''}`}
+          onClick={handlePronunciation}
+          disabled={listening}
+          type="button"
         >
-          {isSpeaking ? '🔊' : '🔈'}
+          {listening ? '🎤 Kuuntelee...' : '🎙️ Harjoittele'}
         </button>
       </div>
-      <button onClick={generateNew}>New Prompt</button>
-      <p className="small-text">Record yourself answering this for 1-2 minutes.</p>
-    </div>
+
+      {result && <PronunciationFeedback result={result} onRetry={handlePronunciation} />}
+
+      <div className="prompt-navigation">
+        <button onClick={handlePrevPrompt} className="nav-btn" type="button">← Edellinen</button>
+        <button onClick={handleNextPrompt} className="nav-btn primary" type="button">Seuraava →</button>
+      </div>
+    </Card>
   );
 }

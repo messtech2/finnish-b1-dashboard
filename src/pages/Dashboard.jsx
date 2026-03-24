@@ -11,7 +11,8 @@ import { useAchievements } from '../hooks/useAchievements';
 import Tabs from '../components/ui/Tabs';
 import Card from '../components/ui/Card';
 import AudioStopButton from '../components/AudioStopButton';
-import WritingChallenge from '../components/WritingChallenge';
+import WritingSession from '../components/WritingSession';
+
 import './Dashboard.css';
 
 const BASE_VOCAB_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
@@ -143,7 +144,9 @@ export default function Dashboard() {
     { id: 'cards', label: 'Kortit', icon: '🎴' },
     { id: 'speaking', label: 'Puhuminen', icon: '🗣️' },
     { id: 'reading', label: 'Lukeminen', icon: '📖' },
-    { id: 'writing', label: 'Kirjoitus', icon: '✍️' }  // ← ADD THIS
+    { id: 'writing', label: 'Kirjoitus', icon: '✍️' },  // ← ADD THIS
+    
+
 
 
   ];
@@ -263,10 +266,10 @@ export default function Dashboard() {
               <ReadingPractice />
             </Card>
 
-            {/* Tab 6: Writing Challenge */}
-            <Card className="tab-card">
-              <WritingChallenge vocabulary={vocabulary} />
-            </Card>
+           
+           <Card className="tab-card">
+          <WritingSession vocabulary={vocabulary} />
+          </Card>
           </Tabs>
         </div>
       </main>

@@ -5,21 +5,14 @@ import Card from './ui/Card';
 import './VocabularyList.css';
 
 export default function VocabularyList({ 
-  words, 
-  totalWords, 
-  onDelete, 
-  onEdit, 
-  editingId, 
-  baseIds,
-  activeWordId,
-  setActiveWordId,
-  getProgress,
-  completeStep
+  words, totalWords, onDelete, onEdit, editingId, baseIds,
+  activeWordId, setActiveWordId, getProgress, completeStep
 }) {
-  const { speak, stop, isSpeaking, isWordPlaying } = useTTS();
+  const { speak, pause, resume, stop, isPlaying, isPaused } = useTTS();
   const { srsData } = useSRS();
   const [expandedCards, setExpandedCards] = useState({});
   const [showTranslation, setShowTranslation] = useState({});
+  const [activeAudioWord, setActiveAudioWord] = useState(null);
 
   const toggleExpand = (wordId) => {
     setExpandedCards(prev => ({ ...prev, [wordId]: !prev[wordId] }));
@@ -29,14 +22,29 @@ export default function VocabularyList({
     setShowTranslation(prev => ({ ...prev, [wordId]: !prev[wordId] }));
   };
 
-  const handleSpeak = (word, e) => {
-    e.stopPropagation();
-    if (isWordPlaying(word.id)) stop();
-    else {
-      speak(word.word, { sentence: word.example }, word.id);
-      setActiveWordId?.(word.id);
-      completeStep?.(word.id, 'read');
+  const handlePlayPause = (word) => {
+    const text = word.example || word.word;
+    
+    if (activeAudioWord === word.id) {
+      // Toggle same word
+      if (isPlaying) {
+        pause();
+      } else if (isPaused) {
+        resume();
+      } else {
+        speak(text);
+      }
+    } else {
+      // New word - stop old, start new
+      stop();
+      setActiveAudioWord(word.id);
+      speak(text);
     }
+  };
+
+  const handleStop = () => {
+    stop();
+    setActiveAudioWord(null);
   };
 
   if (words.length === 0) {
@@ -61,9 +69,9 @@ export default function VocabularyList({
           const isBaseWord = baseIds?.includes(word.id);
           const srs = srsData[word.id] || { strength: 0 };
           const progress = getProgress(word.id);
-          const isPlaying = isWordPlaying(word.id);
           const isExpanded = expandedCards[word.id];
           const showTrans = showTranslation[word.id];
+          const isThisWordPlaying = activeAudioWord === word.id && (isPlaying || isPaused);
 
           return (
             <Card 
@@ -72,21 +80,34 @@ export default function VocabularyList({
               onClick={() => toggleExpand(word.id)}
               hover={true}
             >
-              {/* Left Border Progress Indicator */}
               <div className="card-progress-indicator" style={{
                 background: progress.mastered ? 'var(--success)' : 
                            srs.strength > 0 ? 'var(--primary)' : '#e0e0e0'
               }} />
 
-              {/* Sentence (Primary - Large) */}
               <div className="vocab-sentence">
-                <button 
-                  className={`audio-btn ${isPlaying ? 'playing' : ''}`}
-                  onClick={(e) => handleSpeak(word, e)}
-                  type="button"
-                >
-                  {isPlaying ? '⏹️' : '🔊'}
-                </button>
+                {/* ✅ Audio Controls - visible when this word has audio active */}
+                <div className="audio-controls">
+                  <button 
+                    className={`audio-btn ${isThisWordPlaying && isPlaying ? 'playing' : ''}`}
+                    onClick={(e) => { e.stopPropagation(); handlePlayPause(word); }}
+                    title={isThisWordPlaying && isPlaying ? 'Tauko' : isThisWordPlaying && isPaused ? 'Jatka' : 'Kuuntele'}
+                    type="button"
+                  >
+                    {isThisWordPlaying && isPlaying ? '⏸️' : isThisWordPlaying && isPaused ? '▶️' : '🔈'}
+                  </button>
+                  {isThisWordPlaying && (
+                    <button 
+                      className="audio-btn stop"
+                      onClick={(e) => { e.stopPropagation(); handleStop(); }}
+                      title="Pysäytä"
+                      type="button"
+                    >
+                      ⏹️
+                    </button>
+                  )}
+                </div>
+                
                 <div className="sentence-content">
                   <p className="sentence-text">{word.example}</p>
                   {showTrans && word.exampleTranslation && (
@@ -96,13 +117,13 @@ export default function VocabularyList({
                 <button 
                   className="translate-btn"
                   onClick={(e) => { e.stopPropagation(); toggleTranslation(word.id); }}
+                  title={showTrans ? 'Piilota käännös' : 'Näytä käännös'}
                   type="button"
                 >
                   {showTrans ? '🙈' : '👁️'}
                 </button>
               </div>
 
-              {/* Word + Meaning (Secondary) */}
               <div className="vocab-word">
                 <div className="word-main">
                   <span className="word-finnish">{word.word}</span>
@@ -123,37 +144,25 @@ export default function VocabularyList({
                 </div>
               </div>
 
-              {/* Expanded Actions */}
               {isExpanded && (
                 <div className="vocab-actions">
                   <div className="practice-section">
                     <span className="section-label">Harjoittele:</span>
                     <div className="practice-buttons">
-                      <button className="practice-btn read" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'read'); }} type="button">
-                        📖 Opiskele
-                      </button>
-                      <button className="practice-btn speak" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'practice'); }} type="button">
-                        🗣️ Puhu
-                      </button>
-                      <button className="practice-btn game" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'game'); }} type="button">
-                        🎮 Testaa
-                      </button>
+                      <button className="practice-btn read" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'read'); }} type="button">📖 Opiskele</button>
+                      <button className="practice-btn speak" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'practice'); }} type="button">🗣️ Puhu</button>
+                      <button className="practice-btn game" onClick={(e) => { e.stopPropagation(); completeStep?.(word.id, 'game'); }} type="button">🎮 Testaa</button>
                     </div>
                   </div>
                   {!isBaseWord && (
                     <div className="action-section">
-                      <button className="action-btn edit" onClick={(e) => { e.stopPropagation(); onEdit(word); }} type="button">
-                        ✏️ Muokkaa
-                      </button>
-                      <button className="action-btn delete" onClick={(e) => { e.stopPropagation(); onDelete(word.id); }} type="button">
-                        🗑️ Poista
-                      </button>
+                      <button className="action-btn edit" onClick={(e) => { e.stopPropagation(); onEdit(word); }} type="button">✏️ Muokkaa</button>
+                      <button className="action-btn delete" onClick={(e) => { e.stopPropagation(); onDelete(word.id); }} type="button">🗑️ Poista</button>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* Expand Indicator */}
               <div className="expand-indicator">{isExpanded ? '▲' : '▼'}</div>
             </Card>
           );

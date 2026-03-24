@@ -1,0 +1,379 @@
+.reading-practice {
+  padding: 24px;
+}
+
+.reading-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reading-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.reading-controls-header {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stop-audio-btn,
+.toggle-translation-btn {
+  padding: 8px 14px;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+  color: var(--primary);
+}
+
+.stop-audio-btn:hover,
+.toggle-translation-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.reading-text-container {
+  margin-bottom: 24px;
+}
+
+.reading-title {
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.reading-text-wrapper {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid var(--primary);
+  margin-bottom: 16px;
+}
+
+.reading-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.reading-translation {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border);
+}
+
+.reading-translation p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.speak-full-text-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.speak-full-text-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.speak-full-text-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Questions Section */
+.questions-section {
+  background: #f0f4ff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.questions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.questions-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+.toggle-questions-btn {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-questions-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question-item {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.question-text {
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.question-answer {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.question-answer:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Writing Task Section */
+.writing-task-section {
+  background: #fff4e6;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border-left: 4px solid #e67e22;
+}
+
+.writing-task-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  color: #e67e22;
+}
+
+.writing-prompt {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.writing-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Navigation */
+.reading-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-btn {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nav-btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.nav-btn.primary:hover {
+  background: var(--primary-dark);
+}
+
+.text-counter {
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .reading-practice {
+    padding: 20px;
+  }
+  
+  .reading-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .reading-controls-header {
+    width: 100%;
+  }
+  
+  .stop-audio-btn,
+  .toggle-translation-btn {
+    flex: 1;
+  }
+  
+  .reading-navigation {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .nav-btn {
+    width: 100%;
+  }
+}
+
+/* ========== COMPACT AUDIO CONTROLS ========== */
+.audio-controls-compact {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.audio-btn-small {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.audio-btn-small:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.audio-btn-small.playing {
+  background: #e67e22;
+  animation: pulse-audio 1.5s infinite;
+}
+
+.audio-btn-small.stop {
+  background: var(--error);
+  width: 32px;
+  height: 32px;
+  font-size: 0.95rem;
+}
+
+.audio-btn-small.stop:hover {
+  background: #c82333;
+}
+
+.audio-btn-small:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ✅ Audio Controls - Always Visible */
+.audio-controls-compact {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.audio-btn-small {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.audio-btn-small:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.audio-btn-small.playing {
+  background: #e67e22;
+  animation: pulse-audio 1.5s infinite;
+}
+
+.audio-btn-small.stop {
+  background: #dc3545;
+  width: 40px;
+  height: 40px;
+}
+
+.audio-btn-small.stop:hover {
+  background: #c82333;
+}
+
+@keyframes pulse-audio {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(230, 126, 34, 0); }
+}

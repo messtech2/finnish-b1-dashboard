@@ -1,90 +1,177 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
+import Card from './ui/Card';
+import './ReadingPractice.css';
 
-const readingTexts = [
+const READING_TEXTS = [
   {
-    title: "Suomen kesä",
-    text: "Suomen kesä on lyhyt, mutta kaunis. Kesäkuussa ja heinäkuussa aurinko paistaa melkein koko yön pohjoisessa. Monet suomalaiset viettävät aikaa mökillä. Siellä he saunovat, uivat järvessä ja grillaavat makkaraa. Kesä on tärkeä aika rentoutumiselle.",
-    translation: "Finnish summer is short, but beautiful. In June and July, the sun shines almost all night in the north. Many Finns spend time at their cottage. There they sauna, swim in the lake and grill sausages. Summer is an important time for relaxation."
+    title: "Työpäivä Suomessa",
+    text: "Suomalainen työpäivä alkaa yleensä kahdeksan tai yhdeksän aikaan aamulla. Useimmat ihmiset menevät töihin joko bussilla, junalla tai autolla, koska julkinen liikenne toimii hyvin. Työpaikalla on tärkeää olla ajoissa, sillä punctuality on osa suomalaista kulttuuria. Lounasaika on yleensä kello 11–12, ja monet syövät työpaikan ruokalassa, vaikka jotkut tuovatkin eväät kotoa. Iltapäivällä, noin kello 15, on usein kahvitauko, jolloin työntekijät voivat jutella rennosti. Työpäivä päättyy yleensä neljän ja viiden välillä, mutta tietenkin se riippuu alasta. Kotiin päästyään monet suomalaiset viettävät aikaa perheen kanssa, käyvät lenkillä tai harrastavat jotain muuta. Vaikka työ on tärkeää, myös vapaa-aika arvostetaan suuresti Suomessa.",
+    translation: "A Finnish workday usually starts at eight or nine in the morning. Most people go to work by bus, train, or car, because public transport works well.",
+    questions: [
+      "Milloin työpäivä yleensä alkaa Suomessa?",
+      "Miksi on tärkeää olla ajoissa työpaikalla?",
+      "Mitä suomalaiset tekevät vapaa-ajallaan?"
+    ],
+    writingPrompt: "Kuvaile oma työpäiväsi tai koulupäiväsi."
   },
   {
-    title: "Talvi Suomessa",
-    text: "Talvi on Suomessa pitkä ja kylmä. Lumi sataa usein marraskuusta huhtikuuhun. Lapset tykkäävät laskea mäkeä ja rakentaa lumilinnoja. Aikuiset hiihtävät ja luistelevat. Talvella on myös kaamospohjoisessa, jossa aurinko ei nouse ollenkaan.",
-    translation: "Winter in Finland is long and cold. Snow often falls from November to April. Children like to sled and build snow castles. Adults ski and skate. In winter there is also polar night in the north, where the sun doesn't rise at all."
-  },
-  {
-    title: "Suomalainen ruoka",
-    text: "Suomalainen ruoka on yksinkertaista ja terveellistä. Kalaa syödään paljon, erityisesti lohta ja silakkaa. Karjalanpiirakka on perinteinen herkku. Suomalaiset juovat paljon kahvia, enemmän kuin mikään muu kansa maailmassa.",
-    translation: "Finnish food is simple and healthy. Fish is eaten a lot, especially salmon and herring. Karelian pie is a traditional delicacy. Finns drink a lot of coffee, more than any other nation in the world."
+    title: "Suomen luonto ja vuodenajat",
+    text: "Suomi on maa, jossa luonto on hyvin läsnä ihmisten elämässä. Vaikka talvet ovat pitkiä ja pimeitä, monet suomalaiset rakastavat talvea, koska silloin voi hiihtää, luistella ja nauttia lumisesta maisemasta. Kevät tulee hitaasti, mutta kun se viimein saapuu, luonto herää eloon ja linnut alkavat laulaa. Kesä on lyhyt mutta intensiivinen: aurinko paistaa pitkään, ja ihmiset viettävät paljon aikaa ulkona, mökeillä tai rannalla. Syksy taas tuo mukanaan kauniit ruskanvärit, mutta myös sateet ja viilenemisen. Koska vuodenajat vaihtelevat niin paljon, suomalaiset ovat oppineet sopeutumaan eri olosuhteisiin.",
+    translation: "Finland is a country where nature is very present in people's lives. Although winters are long and dark, many Finns love winter.",
+    questions: [
+      "Miksi suomalaiset rakastavat talvea?",
+      "Mitä ihmiset tekevät kesällä?",
+      "Miksi luonto on tärkeä suomalaisille?"
+    ],
+    writingPrompt: "Mikä vuodenaika on sinulle paras ja miksi?"
   }
 ];
 
-export default function ReadingPractice({ showTranslation: globalShowTranslation }) {
-  const { speak, stop, isSpeaking } = useTTS();
+export default function ReadingPractice() {
+  const { speak, pause, resume, stop, isPlaying, isPaused } = useTTS();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showTranslation, setShowTranslation] = useState(false);
+  const [showQuestions, setShowQuestions] = useState(true);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [audioActive, setAudioActive] = useState(false);
 
-  const currentText = readingTexts[currentIndex];
+  const currentText = READING_TEXTS[currentIndex];
 
-  const handleSpeak = () => {
-    if (isSpeaking) {
-      stop();
+  // Stop audio when text changes
+  useEffect(() => {
+    stop();
+    setAudioActive(false);
+  }, [currentIndex, stop]);
+
+  const handlePlayPause = () => {
+    if (!currentText?.text) return;
+    
+    if (isPlaying) {
+      pause();
+    } else if (isPaused) {
+      resume();
     } else {
+      setAudioActive(true);
       speak(currentText.text);
     }
   };
 
+  const handleStop = () => {
+    stop();
+    setAudioActive(false);
+  };
+
   const handleNext = () => {
     stop();
-    setCurrentIndex((prev) => (prev + 1) % readingTexts.length);
+    setAudioActive(false);
+    setCurrentIndex((prev) => (prev + 1) % READING_TEXTS.length);
     setShowTranslation(false);
+    setShowQuestions(true);
+    setUserAnswers({});
   };
 
   const handlePrev = () => {
     stop();
-    setCurrentIndex((prev) => (prev - 1 + readingTexts.length) % readingTexts.length);
+    setAudioActive(false);
+    setCurrentIndex((prev) => (prev - 1 + READING_TEXTS.length) % READING_TEXTS.length);
     setShowTranslation(false);
+    setShowQuestions(true);
+    setUserAnswers({});
   };
 
+  const handleAnswerChange = (questionIndex, answer) => {
+    setUserAnswers(prev => ({ ...prev, [questionIndex]: answer }));
+  };
+
+  // ✅ Controls always visible when audio has been activated for this text
+  const showControls = audioActive || isPlaying || isPaused;
+
   return (
-    <div className="reading-practice">
+    <Card className="reading-practice">
       <div className="reading-header">
         <h3>📖 Lukuharjoitus</h3>
-        {/* ✅ Stop button visible when audio plays */}
-        {isSpeaking && (
-          <button className="reading-audio-stop" onClick={stop}>
-            ⏹️ Pysäytä
+        <div className="reading-controls-header">
+          {/* ✅ ALWAYS VISIBLE Audio Controls */}
+          <div className="audio-controls-compact">
+            <button 
+              className={`audio-btn-small ${isPlaying ? 'playing' : ''}`}
+              onClick={handlePlayPause}
+              title={isPlaying ? 'Tauko' : isPaused ? 'Jatka' : 'Kuuntele'}
+              type="button"
+            >
+              {isPlaying ? '⏸️' : isPaused ? '▶️' : '🔈'}
+            </button>
+            {/* ✅ Stop button - visible when audio is/was active */}
+            {showControls && (
+              <button 
+                className="audio-btn-small stop"
+                onClick={handleStop}
+                title="Pysäytä"
+                type="button"
+              >
+                ⏹️
+              </button>
+            )}
+          </div>
+          <button 
+            className="toggle-translation-btn"
+            onClick={() => setShowTranslation(!showTranslation)}
+            type="button"
+          >
+            {showTranslation ? '🙈 Piilota EN' : '👁️ Näytä EN'}
           </button>
-        )}
+        </div>
       </div>
       
       <div className="reading-text-container">
         <h4 className="reading-title">{currentText.title}</h4>
-        <p className="reading-text">{currentText.text}</p>
-        
-        {/* ✅ Individual translation toggle */}
-        <button 
-          className="translation-toggle-small reading-toggle"
-          onClick={() => setShowTranslation(!showTranslation)}
-          title={showTranslation ? 'Piilota käännös' : 'Näytä käännös'}
-        >
-          {showTranslation ? '🙈' : '👁️'}
-        </button>
-        
-        {showTranslation && (
-          <div className="reading-translation">
-            <p>{currentText.translation}</p>
+        <div className="reading-text-wrapper">
+          <p className="reading-text">{currentText.text}</p>
+          {showTranslation && (
+            <div className="reading-translation">
+              <p>{currentText.translation}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="questions-section">
+        <div className="questions-header">
+          <h4>❓ Ymmärtämiskysymykset</h4>
+          <button className="toggle-questions-btn" onClick={() => setShowQuestions(!showQuestions)} type="button">
+            {showQuestions ? '🔽 Piilota' : '🔽 Näytä'}
+          </button>
+        </div>
+        {showQuestions && (
+          <div className="questions-list">
+            {currentText.questions.map((question, index) => (
+              <div key={index} className="question-item">
+                <p className="question-text">{question}</p>
+                <textarea
+                  className="question-answer"
+                  value={userAnswers[index] || ''}
+                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  placeholder="Vastaa suomeksi..."
+                  rows={2}
+                />
+              </div>
+            ))}
           </div>
         )}
       </div>
-      
-      <div className="reading-controls">
-        <button onClick={handlePrev}>← Edellinen</button>
-        <button onClick={handleSpeak} className={isSpeaking ? 'speaking' : ''}>
-          {isSpeaking ? '⏹️ Pysäytä' : '🔈 Kuuntele'}
-        </button>
-        <button onClick={handleNext}>Seuraava →</button>
+
+      <div className="writing-task-section">
+        <h4>✍️ Kirjoitustehtävä</h4>
+        <p className="writing-prompt">{currentText.writingPrompt}</p>
+        <p className="writing-hint">💡 Kirjoita 4–5 lausetta vihkoosi.</p>
       </div>
-    </div>
+      
+      <div className="reading-navigation">
+        <button onClick={handlePrev} className="nav-btn" type="button">← Edellinen</button>
+        <span className="text-counter">{currentIndex + 1} / {READING_TEXTS.length}</span>
+        <button onClick={handleNext} className="nav-btn primary" type="button">Seuraava →</button>
+      </div>
+    </Card>
   );
 }

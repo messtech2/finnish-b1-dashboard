@@ -1,16 +1,27 @@
+import { useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
 
+// ✅ Global audio stop button - shows when audio is playing
 export default function AudioStopButton() {
-  const { stop, isSpeaking } = useTTS();
+  const { stop, isPlaying } = useTTS();
 
-  if (!isSpeaking) return null;
+  // ✅ Stop audio when navigating away
+  useEffect(() => {
+    return () => {
+      if (isPlaying) {
+        stop();
+      }
+    };
+  }, [isPlaying, stop]);
+
+  if (!isPlaying) return null;
 
   return (
     <button 
       className="global-audio-stop" 
       onClick={stop}
       title="Pysäytä kaikki äänet"
-      aria-label="Stop audio"
+      type="button"
     >
       ⏹️ Pysäytä ääni
     </button>
