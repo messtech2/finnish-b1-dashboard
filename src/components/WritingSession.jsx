@@ -3,7 +3,7 @@ import { useTTS } from '../hooks/useTTS';
 import Card from './ui/Card';
 import './WritingSession.css';
 
-const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/master/public/user-writing.json'\;
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/master/public/user-writing.json';
 const STORAGE_KEY = 'writing-entries-local';
 
 export default function WritingSession({ vocabulary }) {
