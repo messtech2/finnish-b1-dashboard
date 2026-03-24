@@ -294,3 +294,20 @@ textarea:focus-visible {
   width: 36px;
   height: 36px;
 }
+
+/* 🔧 TEMPORARY: Ensure all interactive elements are clickable */
+.yki-reading button,
+.yki-reading [onclick],
+.yki-reading .word,
+.yki-reading input[type="radio"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Remove any overlay that might block clicks */
+.yki-reading {
+  position: relative;
+  z-index: 1;
+}
