@@ -1,4 +1,74 @@
 {
-  "lastUpdated": "2026-01-01T00:00:00.000Z",
-  "entries": []
+  "lastUpdated": "2026-03-24T08:33:44.557Z",
+  "entries": [
+    {
+      "id": 1774341166807,
+      "createdAt": "2026-03-24T08:32:46.807Z",
+      "words": [
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "daily-routines",
+          "word": "lounas",
+          "meaning": "lunch",
+          "example": "Syön lounasta.",
+          "exampleTranslation": "I eat lunch."
+        },
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "hobbies",
+          "word": "kirja",
+          "meaning": "book",
+          "example": "Luen kirjaa.",
+          "exampleTranslation": "I read a book."
+        },
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "work",
+          "word": "työ",
+          "meaning": "work",
+          "example": "Menen töihin.",
+          "exampleTranslation": "I go to work."
+        },
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "general",
+          "word": "raha",
+          "meaning": "money",
+          "example": "Minulla on rahaa.",
+          "exampleTranslation": "I have money."
+        },
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "food",
+          "word": "tee",
+          "meaning": "tea",
+          "example": "Haluaisitko kupin teetä?",
+          "exampleTranslation": "Would you like a cup of tea?"
+        },
+        {
+          "difficulty": "easy",
+          "strength": 0,
+          "userExamples": [],
+          "category": "general",
+          "word": "sää",
+          "meaning": "weather",
+          "example": "Sää on kaunis.",
+          "exampleTranslation": "The weather is nice."
+        }
+      ],
+      "originalText": "Minun Vukkonlpuna Joka vikkonlopunna me nukkume pommin, ja herään kello 10, koska emme työta ja poikani ei ole kuolu. viime vukkonlppu olin tosu vasyvyit, koska kävelin puistoon 4 kilometria. Niin herään kello 10 jä menin kittio jä tein aamianen jä soimme yhdesia perhe kanssa.. Soin leipa voi kanssa jä join teeta , se oli helpo aamianen. Poikani soi nuggeti, se on hanella suosikki aamianen. Yleensa hän ei syo mittan aamianen jä mene kuoluun ilman ruoka. Teidan se on vaikea mutta en voi mitta teidan.",
+      "correctedText": "Minun viikonloppuni\n\nYleensä viikonloppuna nukun pommiin ja herään noin kello 10, koska en käy töissä eikä poikani mene kouluun.\n\nViime viikonloppuna olin kuitenkin todella väsynyt, koska kävelin puistossa noin neljä kilometriä. Sen takia heräsin myöhään. Kun heräsin, menin keittiöön ja tein aamiaisen. Söimme yhdessä perheen kanssa.\n\nSöin leipää voin kanssa ja join teetä. Se oli helppo aamiainen. Poikani söi nuggetteja, koska ne ovat hänen lempiruokaansa.\n\nYleensä hän ei syö mitään aamulla, vaan menee kouluun ilman ruokaa. Tiedän, että se on vaikeaa, mutta en aina tiedä, mitä tehdä.\n\nIllalla söimme vielä yhdessä päivällisen, ja sen jälkeen rentouduimme kotona.",
+      "updatedAt": "2026-03-24T08:33:13.973Z"
+    }
+  ]
 }
