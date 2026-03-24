@@ -672,3 +672,39 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
+
+/* ✅ Ensure buttons are clickable */
+.btn-add-text,
+.btn-add-text-inline {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 10 !important;
+  position: relative;
+}
+
+.btn-add-text:hover,
+.btn-add-text-inline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 53, 128, 0.3);
+}
+
+.btn-add-text:active,
+.btn-add-text-inline:active {
+  transform: translateY(0);
+}
+
+/* ✅ Form should be above other content */
+.add-text-form {
+  position: relative;
+  z-index: 100;
+}
+
+.form-actions button {
+  cursor: pointer !important;
+}
+
+/* ✅ Empty state button */
+.empty-state .btn-add-text-inline {
+  display: inline-block;
+  margin-top: 16px;
+}
