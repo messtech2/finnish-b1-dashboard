@@ -12,6 +12,7 @@ import Tabs from '../components/ui/Tabs';
 import Card from '../components/ui/Card';
 import AudioStopButton from '../components/AudioStopButton';
 import WritingSession from '../components/WritingSession';
+import YkiTrainingHub from '../components/YkiTrainingHub';
 
 import './Dashboard.css';
 
@@ -148,6 +149,7 @@ export default function Dashboard() {
     { id: 'speaking', label: 'Puhuminen', icon: '🗣️' },
     { id: 'reading', label: 'Lukeminen', icon: '📖' },
     { id: 'writing', label: 'Kirjoitus', icon: '✍️' },  // ← ADD THIS
+    { id: 'yki', label: '📘 YKI B1', icon: '📘' }
 
 
 
@@ -272,6 +274,9 @@ export default function Dashboard() {
            
            <Card className="tab-card">
           <WritingSession vocabulary={vocabulary} />
+          </Card>
+          <Card className="tab-card">
+    <     YkiTrainingHub />
           </Card>
           </Tabs>
         </div>
