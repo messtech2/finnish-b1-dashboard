@@ -622,3 +622,47 @@
   background: #1b1f23;
   transform: translateY(-2px);
 }
+
+/* ========== SYNC BUTTONS ========== */
+.btn-github {
+  background: #24292e;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-github:hover {
+  background: #1b1f23;
+  transform: translateY(-2px);
+}
+
+.btn-refresh {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-refresh:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}

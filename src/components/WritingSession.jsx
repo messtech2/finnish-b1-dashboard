@@ -3,6 +3,7 @@ import { useTTS } from '../hooks/useTTS';
 import Card from './ui/Card';
 import './WritingSession.css';
 
+const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/master/public/user-writing.json'\;
 const STORAGE_KEY = 'writing-entries-local';
 
 export default function WritingSession({ vocabulary }) {
@@ -13,6 +14,38 @@ export default function WritingSession({ vocabulary }) {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [view, setView] = useState('write');
   const [correctedText, setCorrectedText] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Load entries: GitHub first, then localStorage fallback
+  const loadEntries = async () => {
+    setLoading(true);
+    try {
+      // Try fetch from GitHub first (works on Vercel, phone, etc.)
+      const response = await fetch(GITHUB_RAW_URL + '?t=' + Date.now());
+      
+      if (response.ok) {
+        const data = await response.json();
+        const githubEntries = data.entries || [];
+        console.log('📥 Loaded from GitHub:', githubEntries.length, 'entries');
+        
+        // Save to localStorage as cache
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(githubEntries));
+        setEntries(githubEntries);
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.warn('⚠️ GitHub fetch failed, using localStorage:', error);
+    }
+    
+    // Fallback to localStorage (works offline, localhost)
+    const local = localStorage.getItem(STORAGE_KEY);
+    if (local) {
+      console.log('📥 Loaded from localStorage:', JSON.parse(local).length, 'entries');
+      setEntries(JSON.parse(local));
+    }
+    setLoading(false);
+  };
 
   // Generate words
   const generateWords = () => {
@@ -24,23 +57,22 @@ export default function WritingSession({ vocabulary }) {
     setCurrentWords(selected);
   };
 
-  // Load entries from localStorage on mount
+  // Load on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        setEntries(JSON.parse(saved));
-      } catch (e) {
-        console.warn('Failed to load entries:', e);
-      }
-    }
+    loadEntries();
     generateWords();
   }, [vocabulary]);
 
-  // Save entries to localStorage
+  // Save entries to localStorage + return GitHub-ready JSON
   const saveEntries = (newEntries) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
     setEntries(newEntries);
+    
+    // Return GitHub-ready JSON for manual sync
+    return JSON.stringify({
+      lastUpdated: new Date().toISOString(),
+      entries: newEntries
+    }, null, 2);
   };
 
   // Save session
@@ -58,10 +90,14 @@ export default function WritingSession({ vocabulary }) {
       correctedText: ''
     };
 
-    saveEntries([newEntry, ...entries]);
+    const githubJson = saveEntries([newEntry, ...entries]);
     setWritingText('');
     generateWords();
-    alert('✅ Tallennettu! (Local only)');
+    
+    // Show sync instructions
+    alert('✅ Tallennettu!\n\nTo sync to GitHub:\n1. Click "📤 GitHub"\n2. Paste to public/user-writing.json\n3. git commit → push');
+    
+    return githubJson;
   };
 
   // Open entry
@@ -117,11 +153,29 @@ export default function WritingSession({ vocabulary }) {
     };
     const json = JSON.stringify(data, null, 2);
     navigator.clipboard.writeText(json).then(() => {
-      alert('✅ Kopioitu!\n\nNow:\n1. Open public/user-writing.json\n2. Paste\n3. git add → commit → push');
+      alert('✅ Kopioitu!\n\nNow:\n1. Open public/user-writing.json\n2. Paste (replace all)\n3. git add → commit → push\n4. Wait ~60s for Vercel deploy');
     }).catch(() => {
-      alert('❌ Copy failed. Select and copy manually:\n\n' + json);
+      // Fallback if clipboard fails
+      alert('Select and copy this JSON:\n\n' + json);
     });
   };
+
+  // ✅ Refresh from GitHub (manual pull)
+  const handleRefreshFromGitHub = async () => {
+    setLoading(true);
+    await loadEntries();
+    alert('✅ Päivitetty GitHubista!');
+  };
+
+  if (loading) {
+    return (
+      <Card className="writing-session">
+        <div className="loading-state">
+          <p>Ladataan kirjoituksia...</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="writing-session">
@@ -134,9 +188,12 @@ export default function WritingSession({ vocabulary }) {
           <button className="btn-history" onClick={() => setView('list')} type="button">
             📚 Historia ({entries.length})
           </button>
-          {/* ✅ GitHub Sync Button */}
+          {/* ✅ GitHub Sync Buttons */}
           <button className="btn-github" onClick={handleCopyForGitHub} type="button">
-            📤 GitHub
+            📤 Vient
+          </button>
+          <button className="btn-refresh" onClick={handleRefreshFromGitHub} type="button">
+            🔄 Päivitä
           </button>
         </div>
       </div>
@@ -184,7 +241,7 @@ export default function WritingSession({ vocabulary }) {
         <div className="history-list">
           <h4>📚 Kirjoitukset ({entries.length})</h4>
           {entries.length === 0 ? (
-            <p className="empty-message">Ei kirjoituksia vielä.</p>
+            <p className="empty-message">Ei kirjoituksia vielä. Aloita kirjoittamalla!</p>
           ) : (
             entries.map(entry => (
               <div key={entry.id} className="history-entry">
