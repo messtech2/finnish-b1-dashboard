@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
 import Card from './ui/Card';
 import './WritingSession.css';
 
-const STORAGE_KEY = 'writing-entries';
+const STORAGE_KEY = 'writing-entries-local';
 
 export default function WritingSession({ vocabulary }) {
   const { speak, isSpeaking } = useTTS();
@@ -11,93 +11,86 @@ export default function WritingSession({ vocabulary }) {
   const [writingText, setWritingText] = useState('');
   const [entries, setEntries] = useState([]);
   const [selectedEntry, setSelectedEntry] = useState(null);
-  const [view, setView] = useState('write'); // 'write' | 'list' | 'detail'
+  const [view, setView] = useState('write');
   const [correctedText, setCorrectedText] = useState('');
 
-  // Generate writing words
-  const generateWords = useCallback(() => {
+  // Generate words
+  const generateWords = () => {
     if (!vocabulary || vocabulary.length < 5) return;
     const selected = [...vocabulary]
       .sort(() => 0.5 - Math.random())
       .slice(0, 6)
       .filter(w => w.word && w.meaning);
     setCurrentWords(selected);
-  }, [vocabulary]);
+  };
 
-  // Load entries on mount
+  // Load entries from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        setEntries(parsed.sort((a, b) => b.date - a.date));
+        setEntries(JSON.parse(saved));
       } catch (e) {
         console.warn('Failed to load entries:', e);
       }
     }
     generateWords();
-  }, [generateWords]);
+  }, [vocabulary]);
 
-  // Save entries
+  // Save entries to localStorage
   const saveEntries = (newEntries) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newEntries));
-    setEntries(newEntries.sort((a, b) => b.date - a.date));
+    setEntries(newEntries);
   };
 
-  // Handle speak word
-  const handleSpeakWord = (word) => {
-    speak(word.word, { sentence: word.example });
-  };
-
-  // Handle save session
+  // Save session
   const handleSaveSession = () => {
-    if (!writingText.trim()) {
+    if (!writingText.trim() || currentWords.length === 0) {
       alert('Kirjoita jotain ensin!');
-      return;
-    }
-    if (currentWords.length === 0) {
-      alert('Ei sanoja valittuna!');
       return;
     }
 
     const newEntry = {
       id: Date.now(),
-      date: Date.now(),
+      createdAt: new Date().toISOString(),
       words: currentWords,
       originalText: writingText.trim(),
       correctedText: ''
     };
 
-    saveEntries([...entries, newEntry]);
+    saveEntries([newEntry, ...entries]);
     setWritingText('');
     generateWords();
-    alert('✅ Kirjoitus tallennettu!');
+    alert('✅ Tallennettu! (Local only)');
   };
 
-  // Handle open entry
+  // Open entry
   const handleOpenEntry = (entry) => {
     setSelectedEntry(entry);
     setCorrectedText(entry.correctedText || '');
     setView('detail');
   };
 
-  // Handle save correction
+  // Save correction
   const handleSaveCorrection = () => {
-    const updatedEntries = entries.map(entry =>
-      entry.id === selectedEntry.id
-        ? { ...entry, correctedText: correctedText.trim() }
-        : entry
+    if (!selectedEntry) return;
+    
+    const updated = entries.map(e => 
+      e.id === selectedEntry.id 
+        ? { ...e, correctedText: correctedText.trim(), updatedAt: new Date().toISOString() }
+        : e
     );
-    saveEntries(updatedEntries);
+    
+    saveEntries(updated);
     setSelectedEntry({ ...selectedEntry, correctedText: correctedText.trim() });
     alert('✅ Korjaus tallennettu!');
   };
 
-  // Handle delete entry
+  // Delete entry
   const handleDeleteEntry = (id) => {
-    if (window.confirm('Haluatko varmasti poistaa tämän kirjoituksen?')) {
-      const updatedEntries = entries.filter(entry => entry.id !== id);
-      saveEntries(updatedEntries);
+    if (window.confirm('Poistetaanko tämä kirjoitus?')) {
+      const filtered = entries.filter(e => e.id !== id);
+      saveEntries(filtered);
       if (selectedEntry?.id === id) {
         setView('write');
         setSelectedEntry(null);
@@ -105,42 +98,29 @@ export default function WritingSession({ vocabulary }) {
     }
   };
 
-  // Handle new session
-  const handleNewSession = () => {
-    if (writingText.trim() && !window.confirm('Haluatko aloittaa uuden session? Nykyinen teksti katoaa.')) {
-      return;
-    }
-    generateWords();
-    setWritingText('');
-  };
-
   // Format date
-  const formatDate = (timestamp) => {
-    return new Date(timestamp).toLocaleDateString('fi-FI', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  const formatDate = (iso) => new Date(iso).toLocaleDateString('fi-FI', {
+    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
 
-  // Preview text
-  const previewText = (text, maxLength = 50) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-  };
+  const previewText = (text, max = 50) => 
+    text.length <= max ? text : text.substring(0, max) + '...';
 
-  // Count words used from list
-  const countWordsUsed = () => {
-    let count = 0;
-    currentWords.forEach(w => {
-      if (writingText.toLowerCase().includes(w.word.toLowerCase())) {
-        count++;
-      }
+  const countWordsUsed = () => 
+    currentWords.filter(w => writingText.toLowerCase().includes(w.word.toLowerCase())).length;
+
+  // ✅ Manual GitHub Sync: Copy JSON to clipboard
+  const handleCopyForGitHub = () => {
+    const data = {
+      lastUpdated: new Date().toISOString(),
+      entries: entries
+    };
+    const json = JSON.stringify(data, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+      alert('✅ Kopioitu!\n\nNow:\n1. Open public/user-writing.json\n2. Paste\n3. git add → commit → push');
+    }).catch(() => {
+      alert('❌ Copy failed. Select and copy manually:\n\n' + json);
     });
-    return count;
   };
 
   return (
@@ -149,112 +129,79 @@ export default function WritingSession({ vocabulary }) {
         <h3>✍️ Kirjoitusharjoitus</h3>
         <div className="header-actions">
           {view !== 'write' && (
-            <button className="btn-back" onClick={() => setView('write')} type="button">
-              ← Takaisin
-            </button>
+            <button className="btn-back" onClick={() => setView('write')} type="button">← Takaisin</button>
           )}
           <button className="btn-history" onClick={() => setView('list')} type="button">
             📚 Historia ({entries.length})
           </button>
+          {/* ✅ GitHub Sync Button */}
+          <button className="btn-github" onClick={handleCopyForGitHub} type="button">
+            📤 GitHub
+          </button>
         </div>
       </div>
 
-      {/* VIEW: Write Session */}
+      {/* VIEW: Write */}
       {view === 'write' && (
         <div className="write-session">
-          {/* Words Section */}
           <div className="words-section">
             <div className="words-header">
-              <h4>📦 Sanat tähän kirjoitukseen:</h4>
-              <button className="btn-new-words" onClick={handleNewSession} type="button">
-                🎲 Uudet sanat
-              </button>
+              <h4>📦 Sanat:</h4>
+              <button className="btn-new-words" onClick={generateWords} type="button">🎲 Uudet</button>
             </div>
             <div className="words-grid">
-              {currentWords.map((word, index) => (
-                <div key={`${word.id || index}-${index}`} className="word-item">
-                  <div className="word-content">
-                    <span className="word-finnish">{word.word}</span>
-                    <span className="word-meaning">{word.meaning}</span>
-                  </div>
-                  <button 
-                    className="btn-speak-word"
-                    onClick={() => handleSpeakWord(word)}
-                    disabled={isSpeaking}
-                    title="Kuuntele"
-                    type="button"
-                  >
-                    🔊
-                  </button>
+              {currentWords.map((word, i) => (
+                <div key={`${word.id}-${i}`} className="word-item">
+                  <span className="word-finnish">{word.word}</span>
+                  <span className="word-meaning">{word.meaning}</span>
+                  <button className="btn-speak-word" onClick={() => speak(word.word)} type="button">🔊</button>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Writing Section */}
           <div className="writing-section">
-            <div className="writing-header">
-              <h4>✍️ Kirjoita kappale:</h4>
-              <span className="words-used-indicator">
-                Käytetty {countWordsUsed()}/{currentWords.length} sanaa
-              </span>
-            </div>
+            <h4>✍️ Kirjoita:</h4>
             <textarea
               className="writing-textarea"
               value={writingText}
               onChange={(e) => setWritingText(e.target.value)}
-              placeholder="Kirjoita kappale (3-5 lausetta) käyttäen yllä olevia sanoja..."
+              placeholder="Kirjoita 3-5 lausetta käyttäen yllä olevia sanoja..."
               rows={10}
             />
             <div className="writing-footer">
-              <span className="word-count">
-                {writingText.trim() ? writingText.trim().split(/\s+/).length : 0} sanaa
-              </span>
+              <span>{writingText.trim().split(/\s+/).filter(w=>w).length} sanaa</span>
               <button className="btn-save-session" onClick={handleSaveSession} type="button">
-                💾 Tallenna kirjoitus
+                💾 Tallenna
               </button>
             </div>
-          </div>
-
-          {/* Tips */}
-          <div className="writing-tips">
-            <h4>💡 Vinkkejä:</h4>
-            <ul>
-              <li>Yritä käyttää ainakin 3-5 sanaa yllä olevasta listasta</li>
-              <li>Kirjoita 3-5 lausetta</li>
-              <li>Älä huoli virheistä - tärkeintä on harjoitella!</li>
-              <li>Kuuntele sanoja 🔊 painikkeesta</li>
-            </ul>
           </div>
         </div>
       )}
 
-      {/* VIEW: History List */}
+      {/* VIEW: History */}
       {view === 'list' && (
         <div className="history-list">
-          <h4>📚 Kirjoitushistoria ({entries.length})</h4>
+          <h4>📚 Kirjoitukset ({entries.length})</h4>
           {entries.length === 0 ? (
-            <p className="empty-message">Ei kirjoituksia vielä. Aloita kirjoittamalla!</p>
+            <p className="empty-message">Ei kirjoituksia vielä.</p>
           ) : (
             entries.map(entry => (
               <div key={entry.id} className="history-entry">
                 <div className="entry-header">
-                  <span className="entry-date">{formatDate(entry.date)}</span>
+                  <span className="entry-date">{formatDate(entry.createdAt)}</span>
                   <span className={`entry-status ${entry.correctedText ? 'corrected' : 'pending'}`}>
-                    {entry.correctedText ? '✅ Korjattu' : '⏳ Odottaa korjausta'}
+                    {entry.correctedText ? '✅ Korjattu' : '⏳ Odottaa'}
                   </span>
                 </div>
                 <div className="entry-words">
-                  <strong>Sanat:</strong> {entry.words.map(w => w.word).join(', ')}
+                  <strong>Sanat:</strong> {entry.words.map(w => w.word).slice(0,4).join(', ')}
+                  {entry.words.length > 4 && '...'}
                 </div>
                 <p className="entry-preview">{previewText(entry.originalText)}</p>
                 <div className="entry-actions">
-                  <button className="btn-open" onClick={() => handleOpenEntry(entry)} type="button">
-                    📖 Avaa
-                  </button>
-                  <button className="btn-delete" onClick={() => handleDeleteEntry(entry.id)} type="button">
-                    🗑️ Poista
-                  </button>
+                  <button className="btn-open" onClick={() => handleOpenEntry(entry)} type="button">📖 Avaa</button>
+                  <button className="btn-delete" onClick={() => handleDeleteEntry(entry.id)} type="button">🗑️</button>
                 </div>
               </div>
             ))
@@ -262,19 +209,18 @@ export default function WritingSession({ vocabulary }) {
         </div>
       )}
 
-      {/* VIEW: Entry Detail */}
+      {/* VIEW: Detail */}
       {view === 'detail' && selectedEntry && (
         <div className="entry-detail">
           <div className="detail-header">
-            <span className="entry-date">{formatDate(selectedEntry.date)}</span>
+            <span className="entry-date">{formatDate(selectedEntry.createdAt)}</span>
           </div>
 
-          {/* Words Used */}
           <div className="detail-words">
             <h4>📦 Käytetyt sanat:</h4>
             <div className="words-grid">
-              {selectedEntry.words.map((word, index) => (
-                <div key={`${word.id || index}-${index}`} className="word-item small">
+              {selectedEntry.words.map((word, i) => (
+                <div key={`${word.id}-${i}`} className="word-item small">
                   <span className="word-finnish">{word.word}</span>
                   <span className="word-meaning">{word.meaning}</span>
                 </div>
@@ -282,24 +228,18 @@ export default function WritingSession({ vocabulary }) {
             </div>
           </div>
 
-          {/* Side-by-Side Comparison */}
           <div className="comparison-container">
             <div className="comparison-column original">
               <h4>❌ Sinun versiosi</h4>
               <div className="text-display">{selectedEntry.originalText}</div>
             </div>
-
             <div className="comparison-column corrected">
               <h4>✅ Korjattu versio</h4>
               {selectedEntry.correctedText ? (
                 <>
                   <div className="text-display">{selectedEntry.correctedText}</div>
-                  <button 
-                    className="btn-edit-correction" 
-                    onClick={() => setCorrectedText(selectedEntry.correctedText)} 
-                    type="button"
-                  >
-                    ✏️ Muokkaa korjausta
+                  <button className="btn-edit-correction" onClick={() => setCorrectedText(selectedEntry.correctedText)} type="button">
+                    ✏️ Muokkaa
                   </button>
                 </>
               ) : (
@@ -308,7 +248,7 @@ export default function WritingSession({ vocabulary }) {
                     className="correction-textarea"
                     value={correctedText}
                     onChange={(e) => setCorrectedText(e.target.value)}
-                    placeholder="Liitä korjattu versio tähän (esim. ChatGPT:stä)..."
+                    placeholder="Liitä ChatGPT:n korjaus tähän..."
                     rows={8}
                   />
                   <button className="btn-save-correction" onClick={handleSaveCorrection} type="button">
@@ -320,9 +260,7 @@ export default function WritingSession({ vocabulary }) {
           </div>
 
           <div className="detail-actions">
-            <button className="btn-back-list" onClick={() => setView('list')} type="button">
-              ← Takaisin listaan
-            </button>
+            <button className="btn-back-list" onClick={() => setView('list')} type="button">← Takaisin</button>
           </div>
         </div>
       )}

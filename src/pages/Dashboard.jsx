@@ -27,6 +27,9 @@ export default function Dashboard() {
   const [activeWordId, setActiveWordId] = useState(null);
   const itemsPerPage = 10;
 
+
+
+
   // Load vocabularies from GitHub
   useEffect(() => {
     const loadVocabularies = async () => {
@@ -145,7 +148,7 @@ export default function Dashboard() {
     { id: 'speaking', label: 'Puhuminen', icon: '🗣️' },
     { id: 'reading', label: 'Lukeminen', icon: '📖' },
     { id: 'writing', label: 'Kirjoitus', icon: '✍️' },  // ← ADD THIS
-    
+
 
 
 
