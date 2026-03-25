@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Card from '../ui/Card';
-import { enrichWord, copyVocabForGitHub } from '../../utils/enrichVocabulary';
+import { enrichWord, copyVocabForGitHub, fetchVocabFromGitHub } from '../../utils/enrichVocabulary';
+import { saveWord, getPendingWords, clearPendingWords, wordExists } from '../../utils/vocabManager';
 import './ReadingModule.css';
 
 const GITHUB_URL = 'https://raw.githubusercontent.com/messtech2/finnish-b1-dashboard/master/public/yki-reading-texts.json';
@@ -14,6 +15,8 @@ export default function ReadingModule({ mode }) {
   const [loading, setLoading] = useState(true);
   const [wordPopup, setWordPopup] = useState(null);
   const [showFullText, setShowFullText] = useState(false);
+  const [showKeywords, setShowKeywords] = useState(false);
+  const [suggestedKeywords, setSuggestedKeywords] = useState([]);
   const [newText, setNewText] = useState({ title: '', text: '', level: 'B1' });
   const [pendingExport, setPendingExport] = useState(0);
 
@@ -23,9 +26,44 @@ export default function ReadingModule({ mode }) {
     setCurrentIdx(0);
     setAnswers({});
     setShowResults(false);
-    const pending = JSON.parse(localStorage.getItem('vocab-pending-commit') || '[]');
+    const pending = getPendingWords();
     setPendingExport(pending.length);
   }, [mode]);
+
+  // Load suggested keywords when text changes
+  useEffect(() => {
+    if (currentText?.keywords) {
+      const localVocab = JSON.parse(localStorage.getItem('finnish-vocab-v3') || '[]');
+      const existingWords = new Set(localVocab.map(w => w.word.toLowerCase()));
+      
+      // Filter: only show keywords NOT already in vocabulary
+      const newKeywords = currentText.keywords
+        .filter(k => !existingWords.has(k.toLowerCase()))
+        .map(k => ({
+          word: k,
+          meaning: getMeaningForWord(k),
+          isNew: true
+        }));
+      
+      setSuggestedKeywords(newKeywords);
+    } else {
+      setSuggestedKeywords([]);
+    }
+  }, [currentIdx, currentText]);
+
+  const getMeaningForWord = (word) => {
+    const clean = word.toLowerCase().replace(/[^a-zäöå]/g, '');
+    // Simple lookup - you can expand this
+    const meanings = {
+      'asunto': 'apartment', 'vuokra': 'rent', 'yksiö': 'one-room apartment',
+      'kirjasto': 'library', 'lainata': 'to borrow', 'kirjastokortti': 'library card',
+      'tietokone': 'computer', 'tapahtuma': 'event', 'lukupiiri': 'reading circle',
+      'keskustelukerho': 'discussion club', 'henkilökunta': 'staff',
+      'vuokrasopimus': 'rental agreement', 'vuokranantaja': 'landlord',
+      'takuuvuokra': 'deposit', 'irtisanoa': 'to terminate', 'allekirjoittaa': 'to sign'
+    };
+    return meanings[clean] || 'add meaning manually';
+  };
 
   useEffect(() => {
     const loadTexts = async () => {
@@ -61,9 +99,7 @@ export default function ReadingModule({ mode }) {
     const clean = word.replace(/[^a-zäöå]/gi, '');
     if (clean.length < 3) return;
     
-    const localVocab = JSON.parse(localStorage.getItem('finnish-vocab-v3') || '[]');
-    const exists = localVocab.some(w => w.word.toLowerCase() === clean.toLowerCase());
-    
+    const exists = wordExists(clean);
     const enriched = enrichWord(clean, currentText?.text);
     
     if (enriched) {
@@ -77,43 +113,71 @@ export default function ReadingModule({ mode }) {
     }
   };
 
-  const handleAddWord = async (enriched) => {
-    const localVocab = JSON.parse(localStorage.getItem('finnish-vocab-v3') || '[]');
-    const exists = localVocab.some(w => w.word.toLowerCase() === enriched.word.toLowerCase());
-    
-    if (!exists) {
-      localVocab.unshift(enriched);
-      localStorage.setItem('finnish-vocab-v3', JSON.stringify(localVocab));
-      
-      const pending = JSON.parse(localStorage.getItem('vocab-pending-commit') || '[]');
-      if (!pending.some(w => w.word.toLowerCase() === enriched.word.toLowerCase())) {
-        pending.unshift(enriched);
-        localStorage.setItem('vocab-pending-commit', JSON.stringify(pending));
-        setPendingExport(pending.length);
-      }
-    }
-    
+  const handleAddWord = (enriched) => {
+    const added = saveWord(enriched);
     setWordPopup({ ...wordPopup, exists: true });
-    alert(exists 
-      ? 'On jo sanastossa' 
-      : 'Tallennettu! Klikkaa "Vie vocabularies.json" viedäksesi tiedostoon.'
+    setPendingExport(getPendingWords().length);
+    alert(added 
+      ? 'Tallennettu! Klikkaa "Vie vocabularies.json" viedäksesi tiedostoon.' 
+      : 'On jo sanastossa'
     );
+  };
+
+  // ✅ Add keyword from suggestions (manual approval)
+  const handleAddKeyword = (keyword) => {
+    const clean = keyword.toLowerCase().replace(/[^a-zäöå]/g, '');
+    const meaning = getMeaningForWord(keyword);
+    
+    // Find example sentence from text
+    const example = currentText.text.split(/[.!?]+/).find(s => 
+      s.toLowerCase().includes(clean)
+    )?.trim() + '.' || `Sana "${clean}" on tärkeä.`;
+    
+    const enriched = {
+      id: 'vocab-' + Date.now(),
+      word: clean,
+      meaning: meaning,
+      example: example,
+      exampleTranslation: '',
+      category: meaning.includes('to ') ? 'verb' : 'noun',
+      difficulty: meaning !== 'add meaning manually' ? 'medium' : 'unknown',
+      quizQuestion: '',
+      quizOptions: [],
+      quizCorrect: 0,
+      flashcardFront: clean,
+      flashcardBack: meaning,
+      source: 'text-keyword-suggested',
+      needsReview: meaning === 'add meaning manually',
+      createdAt: new Date().toISOString()
+    };
+    
+    const added = saveWord(enriched);
+    setPendingExport(getPendingWords().length);
+    
+    // Remove from suggestions
+    setSuggestedKeywords(prev => prev.filter(k => k.word !== keyword));
+    
+    alert(added 
+      ? `✅ "${keyword}" lisätty sanastoon!` 
+      : 'ℹ️ On jo sanastossa'
+    );
+  };
+
+  // ✅ Add all suggested keywords at once
+  const handleAddAllKeywords = () => {
+    let added = 0;
+    suggestedKeywords.forEach(k => {
+      if (handleAddKeyword(k.word)) added++;
+    });
+    alert(`✅ ${added} sanaa lisätty sanastoon!`);
   };
 
   const handleExportVocab = async () => {
     try {
-      const pending = JSON.parse(localStorage.getItem('vocab-pending-commit') || '[]');
-      if (pending.length === 0) {
-        alert('Ei uusia sanoja vietäväksi.');
-        return;
-      }
-      
-      const result = await copyVocabForGitHub(pending);
-      
-      localStorage.removeItem('vocab-pending-commit');
+      const result = await copyVocabForGitHub();
+      clearPendingWords();
       setPendingExport(0);
-      
-      alert('Kopioitu ' + result.copied + ' sanaa!\n\n1. Avaa public/vocabularies.json\n2. Liitä (korvaa kaikki)\n3. git add → commit → push\n\nUusia sanoja: ' + result.new);
+      alert('Kopioitu ' + result.copied + ' sanaa!\n\n1. Avaa public/vocabularies.json\n2. Liitä (korvaa kaikki)\n3. git add → commit → push\n\nKaikki sanat mukana!');
     } catch (e) {
       alert('Virhe: ' + e.message);
     }
@@ -307,7 +371,7 @@ export default function ReadingModule({ mode }) {
         </div>
       )}
 
-      {/* Full Text Modal - Shows ENTIRE text */}
+      {/* Full Text Modal */}
       {showFullText && (
         <div 
           style={{
@@ -357,9 +421,7 @@ export default function ReadingModule({ mode }) {
             
             {currentText.translation && (
               <details style={{ marginTop: '20px' }}>
-                <summary style={{ cursor: 'pointer', color: '#003580', fontWeight: '600' }}>
-                  Näytä englanninkielinen käännös
-                </summary>
+                <summary style={{ cursor: 'pointer', color: '#003580', fontWeight: '600' }}>Näytä englanninkielinen käännös</summary>
                 <p style={{ fontStyle: 'italic', color: '#666', marginTop: '10px', lineHeight: '1.6' }}>
                   {currentText.translation}
                 </p>
@@ -399,15 +461,73 @@ export default function ReadingModule({ mode }) {
           <textarea 
             id="new-text" 
             placeholder="Teksti (suomeksi)..." 
-            rows={4} 
+            rows={10}
             value={newText.text} 
             onChange={(e) => setNewText(prev => ({ ...prev, text: e.target.value }))}
             style={{ width: '100%', padding: '8px', marginBottom: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
           />
+          <p style={{ fontSize: '0.85rem', color: newText.text.length > 500 ? '#dc3545' : '#666' }}>
+            Merkkejä: {newText.text.length} (Suositus: 500-2000)
+          </p>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
             <button onClick={() => setShowForm(false)} style={{ cursor: 'pointer', padding: '8px 16px', borderRadius: '6px', border: '1px solid #ccc', background: 'white' }}>Peruuta</button>
             <button onClick={handleAddText} style={{ cursor: 'pointer', padding: '8px 16px', borderRadius: '6px', border: 'none', background: '#28a745', color: 'white' }}>Tallenna</button>
           </div>
+        </Card>
+      )}
+
+      {/* ✅ KEYWORD SUGGESTIONS - Option C: Smart Suggest + Manual Approval */}
+      {suggestedKeywords.length > 0 && (
+        <Card className="keyword-suggestions" style={{ marginBottom: '15px', padding: '15px', background: '#fff3cd', borderRadius: '8px', border: '1px solid #ffc107' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h4 style={{ margin: 0, color: '#856404' }}>💡 Ehdotetut avainsanat ({suggestedKeywords.length})</h4>
+            <button onClick={() => setShowKeywords(!showKeywords)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer', color: '#856404' }}>
+              {showKeywords ? '▲' : '▼'}
+            </button>
+          </div>
+          
+          {showKeywords && (
+            <div>
+              <p style={{ fontSize: '0.85rem', color: '#856404', marginBottom: '12px' }}>
+                Nämä sanat ovat tärkeitä tässä tekstissä. Klikkaa lisätäksesi sanastoon:
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
+                {suggestedKeywords.map((k, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleAddKeyword(k.word)}
+                    style={{
+                      padding: '6px 12px',
+                      background: '#28a745',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '16px',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      fontWeight: '500'
+                    }}
+                  >
+                    + {k.word}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={handleAddAllKeywords}
+                style={{
+                  padding: '8px 16px',
+                  background: '#003580',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  fontWeight: '600'
+                }}
+              >
+                ➕ Lisää kaikki ({suggestedKeywords.length})
+              </button>
+            </div>
+          )}
         </Card>
       )}
 
@@ -435,7 +555,6 @@ export default function ReadingModule({ mode }) {
         <span style={{ background: '#e8f4fd', color: '#003580', padding: '4px 10px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '600' }}>{currentText.level}</span>
       </div>
 
-      {/* FULL TEXT DISPLAY - No truncation */}
       <div 
         style={{ 
           margin: '20px 0', 
@@ -470,7 +589,6 @@ export default function ReadingModule({ mode }) {
         })}
       </div>
 
-      {/* View Full Text Button */}
       <button 
         onClick={() => setShowFullText(true)}
         style={{ 

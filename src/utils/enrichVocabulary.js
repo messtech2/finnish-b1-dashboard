@@ -1,13 +1,11 @@
-// Vocabulary Extraction - Handles Finnish Inflection + Fallback
+// Vocabulary Extraction - Simple & Reliable
 
 export const WORD_MEANINGS = {
   // Helsinki + cases
   'helsinki': 'Helsinki city', 'helsingin': 'of Helsinki', 'helsingissa': 'in Helsinki',
-  
-  // Keskusta + cases
   'keskusta': 'center downtown', 'keskustassa': 'in the center', 'keskustasta': 'from the center',
   
-  // Common verbs (base + conjugated)
+  // Common verbs
   'lainata': 'to borrow', 'lainaan': 'I borrow', 'lainattu': 'borrowed',
   'lukea': 'to read', 'luen': 'I read', 'luet': 'you read', 'lukee': 'reads',
   'kirjoittaa': 'to write', 'kirjoitan': 'I write', 'kirjoitat': 'you write',
@@ -56,7 +54,7 @@ export const WORD_MEANINGS = {
   'järjestää': 'to organize', 'järjestän': 'I organize',
   'viettää': 'to spend time', 'vietän': 'I spend',
   
-  // Common nouns (base + cases)
+  // Common nouns
   'kirja': 'book', 'kirjan': 'book genitive', 'kirjaa': 'book partitive', 'kirjassa': 'in the book',
   'kirjasto': 'library', 'kirjaston': 'library genitive', 'kirjastossa': 'in the library', 'kirjastosta': 'from the library',
   'lehti': 'magazine newspaper', 'lehden': 'magazine genitive', 'lehdessa': 'in the magazine',
@@ -158,18 +156,11 @@ export const WORD_MEANINGS = {
   'valmis': 'ready', 'valmiin': 'ready genitive'
 };
 
-// Simple Finnish stemmer - maps inflected forms to base
 const stemFinnishWord = (word) => {
   const w = word.toLowerCase();
-  
-  // Direct match first
   if (WORD_MEANINGS[w]) return w;
   
-  // Remove common case endings to find base form
-  const endings = [
-    'sta', 'stä', 'lla', 'llä', 'lta', 'ltä', 'na', 'nä', 'ksi', 'tta', 'ttä', 'ineen', 'ine',
-    'n', 'a', 'ä', 'an', 'än', 'en', 't', 'i', 'ssa', 'ssä', 'seen', 'lle', 'ta', 'tä'
-  ];
+  const endings = ['sta', 'stä', 'lla', 'llä', 'lta', 'ltä', 'na', 'nä', 'ksi', 'tta', 'ttä', 'ineen', 'ine', 'n', 'a', 'ä', 'an', 'än', 'en', 't', 'i', 'ssa', 'ssä', 'seen', 'lle', 'ta', 'tä'];
   
   for (const ending of endings) {
     if (w.endsWith(ending) && w.length > ending.length + 3) {
@@ -181,11 +172,9 @@ const stemFinnishWord = (word) => {
       }
     }
   }
-  
   return w;
 };
 
-// Extract sentence from context
 const extractSentenceFromContext = (word, contextText) => {
   if (!contextText) return null;
   const sentences = contextText.split(/[.!?]+/).filter(s => s.trim().length > 10).map(s => s.trim());
@@ -241,26 +230,18 @@ export const enrichWords = (words, contextText) => {
   return words.slice(0, 15).map(word => enrichWord(word, contextText)).filter(w => w !== null);
 };
 
-export const prepareVocabForFile = (enrichedWords) => {
-  return {
-    lastUpdated: new Date().toISOString(),
-    vocabulary: enrichedWords
-  };
-};
-
-export const copyVocabForGitHub = async (enrichedWords) => {
-  const existing = await fetchVocabFromGitHub();
-  const existingIds = new Set(existing.map(v => v.word.toLowerCase()));
-  const newWords = enrichedWords.filter(w => !existingIds.has(w.word.toLowerCase()));
-  const merged = [...existing, ...newWords];
+// ✅ FIXED: Now exports ALL vocabulary from localStorage (not just GitHub + pending)
+export const copyVocabForGitHub = async () => {
+  // Get ALL vocabulary from localStorage (this has everything)
+  const localVocab = JSON.parse(localStorage.getItem('finnish-vocab-v3') || '[]');
   
   const json = JSON.stringify({
     lastUpdated: new Date().toISOString(),
-    vocabulary: merged
+    vocabulary: localVocab
   }, null, 2);
   
   await navigator.clipboard.writeText(json);
-  return { copied: merged.length, new: newWords.length };
+  return { copied: localVocab.length };
 };
 
 export const fetchVocabFromGitHub = async () => {
@@ -273,11 +254,5 @@ export const fetchVocabFromGitHub = async () => {
   } catch (e) {
     console.warn('GitHub vocab fetch failed');
   }
-  const local = localStorage.getItem('finnish-vocab-file');
-  return local ? JSON.parse(local).vocabulary || [] : [];
-};
-
-export const wordExistsInVocab = async (word) => {
-  const existing = await fetchVocabFromGitHub();
-  return existing.some(v => v.word.toLowerCase() === word.toLowerCase());
+  return [];
 };
