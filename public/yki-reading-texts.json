@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-25T15:50:10.054Z",
+  "lastUpdated": "2026-03-25T16:33:48.354Z",
   "texts": [
     {
       "id": "reading-001",
@@ -30,7 +30,6 @@
       "source": "github",
       "createdAt": "2026-01-15T00:00:00.000Z"
     },
-    
     {
       "id": "user-1774453802594",
       "title": "Kirjasto on kiva paikka",
@@ -42,6 +41,18 @@
       "usedInExam": false,
       "source": "user",
       "createdAt": "2026-03-25T15:50:02.595Z"
+    },
+    {
+      "id": "user-1774456421537",
+      "title": "Vuokrasopimuksen allekirjoitus",
+      "level": "B1",
+      "text": "Maryamille on tarjottu vuokra-asuntoa. Hän on käynyt katsomassa sitä perheensä kanssa. Asunto on suurempi kuin heidän nykyinen asuntonsa. Koko perhe on tyytyväinen uuteen asuntoon, sillä se on lähellä Maryamin työpaikkaa ja hänen poikansa koulua. Tänään Maryam ja hänen miehensä Max menevät allekirjoittamaan vuokrasopimuksen.\nVuokrasopimuksessa on määritelty vuokran määrä ja sopimuksen kesto. Maryamin ja Maxin vuokrasopimus on toistaiseksi voimassa. Se tarkoittaa, että heidän sopimuksensa jatkuu, kunnes he päättävät irtisanoa sen. Myös vuokranantaja voi irtisanoa sopimuksen.\nHeidän täytyy myös maksaa takuuvuokra. Se on kolmen kuukauden vuokra. He saavat takuuvuokran takaisin, jos asunto on hyvässä kunnossa, kun he muuttavat pois.",
+      "keywords": [],
+      "questions": [],
+      "state": "new",
+      "usedInExam": false,
+      "source": "user",
+      "createdAt": "2026-03-25T16:33:41.537Z"
     }
   ]
 }
