@@ -21,6 +21,22 @@ export default function Flashcards({ words, activeWordId, setActiveWordId, onCom
       setActiveWordId(currentWord.id);
     }
   }, [currentWord, setActiveWordId]);
+  // In your Quiz/Flashcard components, load vocabulary like this:
+
+useEffect(() => {
+  const loadVocab = async () => {
+    try {
+      const res = await fetch('/vocabularies.json?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        setVocabulary(data.vocabulary || []);
+      }
+    } catch (e) {
+      console.warn('Vocab load failed:', e);
+    }
+  };
+  loadVocab();
+}, []);
 
   const handlePlayPause = () => {
     if (!currentWord) return;

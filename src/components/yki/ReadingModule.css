@@ -708,3 +708,93 @@
   display: inline-block;
   margin-top: 16px;
 }
+
+/* ✅ Ensure all interactive elements are clickable */
+.yki-reading button,
+.yki-reading [onclick],
+.yki-reading .word,
+.yki-reading input[type="radio"],
+.yki-reading summary {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Remove any overlay that might block clicks */
+.yki-reading {
+  position: relative;
+  z-index: 1;
+}
+
+/* Word hover effect */
+.yki-reading .word:hover {
+  background: #e8f4fd !important;
+  border-radius: 4px;
+}
+
+/* Popup overlay */
+.word-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Loading state */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.empty-state h3 {
+  margin: 0 0 12px 0;
+  color: var(--text-primary);
+}
+
+/* Form styles */
+.add-text-form input,
+.add-text-form select,
+.add-text-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.add-text-form input:focus,
+.add-text-form select:focus,
+.add-text-form textarea:focus {
+  outline: none;
+  border-color: #003580;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .yki-reading .word {
+    font-size: 1rem;
+  }
+  
+  .question-card {
+    padding: 10px;
+  }
+  
+  .btn-submit {
+    width: 100%;
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "lastUpdated": "2026-01-15T00:00:00.000Z",
+  "vocabulary": [
+    {
+      "id": "vocab-001",
+      "word": "lainata",
+      "meaning": "to borrow",
+      "example": "Voin lainata kirjan kirjastosta.",
+      "exampleTranslation": "I can borrow a book from the library.",
+      "category": "verb",
+      "difficulty": "medium",
+      "quizQuestion": "Mitä tarkoittaa 'lainata'?",
+      "quizOptions": ["to lend", "to borrow", "to buy", "to sell"],
+      "quizCorrect": 1,
+      "flashcardFront": "lainata",
+      "flashcardBack": "to borrow",
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "vocab-002",
+      "word": "kirjasto",
+      "meaning": "library",
+      "example": "Kirjasto on auki joka päivä.",
+      "exampleTranslation": "The library is open every day.",
+      "category": "noun",
+      "difficulty": "easy",
+      "quizQuestion": "Missä voi lainata kirjoja?",
+      "quizOptions": ["Kaupassa", "Kirjastossa", "Pankissa", "Ravintolassa"],
+      "quizCorrect": 1,
+      "flashcardFront": "kirjasto",
+      "flashcardBack": "library",
+      "createdAt": "2026-01-15T00:00:00.000Z"
+    }
+  ]
+}
