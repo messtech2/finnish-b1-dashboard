@@ -7,21 +7,13 @@
       "level": "B1",
       "text": "Etsin uutta asuntoa Helsingin keskustasta...",
       "translation": "I am looking for a new apartment...",
-      "keywords": [
-        "asunto",
-        "vuokra",
-        "yksiö"
-      ],
+      "keywords": ["asunto", "vuokra", "yksiö"],
       "questions": [
         {
           "id": "q1",
           "type": "multiple-choice",
           "question": "Mitä henkilö etsii?",
-          "options": [
-            "Taloa",
-            "Yksiötä",
-            "Kaksiota"
-          ],
+          "options": ["Taloa", "Yksiötä", "Kaksiota"],
           "correct": 1
         }
       ],
@@ -35,8 +27,55 @@
       "title": "Kirjasto on kiva paikka",
       "level": "B1",
       "text": "Oletko käynyt kotipaikkakuntasi kirjastossa? Tiedätkö, mitä kirjastossa tehdään?\nKirjastosta voi lainata kirjoja, CD-levyjä, DVD-elokuvia ja lehtiä. Joistakin kirjastoista voi jopa lainata tavaroita, kuten ompelukoneita, kitaroita, porakoneita ja ulkopelejä!\nKirjasto on monille ihmisille kuin toinen olohuone. He viettävät siellä aikaansa, lukevat, opiskelevat tai työskentelevät. Siellä voi käyttää myös tietokonetta ja internetiä.\nKirjastossa on myös erilaisia tapahtumia. Siellä voi kokoontua lukupiiri. Joissakin kirjastoissa järjestetään suomen kielen keskustelukerhoja maahanmuuttajille. Joissakin kirjastoissa lapset voivat osallistua koulun jälkeen läksykerhoon. Siellä joku aikuinen auttaa lapsia läksyjen tekemisessä.\nJos haluat lainata kirjastosta jotain kotiin, tarvitset kirjastokortin. Se ei maksa mitään. Voit kysyä sitä kirjaston henkilökunnalta. Ota silloin mukaan henkilöllisyystodistus.",
-      "keywords": [],
-      "questions": [],
+      "translation": "Have you visited your local library? Do you know what people do there?\nYou can borrow books, CDs, DVDs, and magazines. In some libraries, you can even borrow items like sewing machines, guitars, drills, and outdoor games.\nFor many people, the library is like a second living room. They spend time there reading, studying, or working. You can also use a computer and the internet there.\nThere are also events. Reading groups and discussion clubs are organized, especially for immigrants learning Finnish. Children can join homework clubs after school.\nIf you want to borrow something, you need a library card. It is free. You can ask the staff and bring an ID.",
+      "keywords": [
+        "kirjasto",
+        "lainata",
+        "kirjastokortti",
+        "tietokone",
+        "tapahtuma",
+        "lukupiiri",
+        "keskustelukerho",
+        "henkilökunta"
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Mitä kirjastosta voi lainata?",
+          "options": [
+            "Vain kirjoja",
+            "Kirjoja ja tavaroita",
+            "Vain elokuvia",
+            "Ei mitään"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "q2",
+          "type": "multiple-choice",
+          "question": "Miksi ihmiset menevät kirjastoon?",
+          "options": [
+            "Syömään",
+            "Nukkumaan",
+            "Lukemaan ja opiskelemaan",
+            "Ostamaan tavaroita"
+          ],
+          "correct": 2
+        },
+        {
+          "id": "q3",
+          "type": "multiple-choice",
+          "question": "Mitä tarvitset lainataksesi kirjastosta?",
+          "options": [
+            "Passin",
+            "Rahan",
+            "Kirjastokortin",
+            "Ajokortin"
+          ],
+          "correct": 2
+        }
+      ],
       "state": "new",
       "usedInExam": false,
       "source": "user",
@@ -47,8 +86,56 @@
       "title": "Vuokrasopimuksen allekirjoitus",
       "level": "B1",
       "text": "Maryamille on tarjottu vuokra-asuntoa. Hän on käynyt katsomassa sitä perheensä kanssa. Asunto on suurempi kuin heidän nykyinen asuntonsa. Koko perhe on tyytyväinen uuteen asuntoon, sillä se on lähellä Maryamin työpaikkaa ja hänen poikansa koulua. Tänään Maryam ja hänen miehensä Max menevät allekirjoittamaan vuokrasopimuksen.\nVuokrasopimuksessa on määritelty vuokran määrä ja sopimuksen kesto. Maryamin ja Maxin vuokrasopimus on toistaiseksi voimassa. Se tarkoittaa, että heidän sopimuksensa jatkuu, kunnes he päättävät irtisanoa sen. Myös vuokranantaja voi irtisanoa sopimuksen.\nHeidän täytyy myös maksaa takuuvuokra. Se on kolmen kuukauden vuokra. He saavat takuuvuokran takaisin, jos asunto on hyvässä kunnossa, kun he muuttavat pois.",
-      "keywords": [],
-      "questions": [],
+      "translation": "Maryam has been offered a rental apartment. She has visited it with her family. The apartment is bigger than their current one. The whole family is happy because it is close to her workplace and her son’s school.\nToday, Maryam and her husband Max are signing the rental agreement.\nThe agreement defines rent and duration. It is valid until further notice, meaning it continues until terminated. The landlord can also terminate it.\nThey must pay a deposit equal to three months’ rent. They get it back if the apartment is in good condition when they leave.",
+      "keywords": [
+        "vuokrasopimus",
+        "vuokra",
+        "vuokranantaja",
+        "takuuvuokra",
+        "irtisanoa",
+        "allekirjoittaa",
+        "määrä",
+        "kesto",
+        "voimassa"
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "type": "multiple-choice",
+          "question": "Miksi perhe pitää uudesta asunnosta?",
+          "options": [
+            "Se on halpa",
+            "Se on lähellä työpaikkaa ja koulua",
+            "Se on vanha",
+            "Se on pieni"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "q2",
+          "type": "multiple-choice",
+          "question": "Mitä tarkoittaa 'toistaiseksi voimassa'?",
+          "options": [
+            "Sopimus loppuu pian",
+            "Sopimus jatkuu ilman määräaikaa",
+            "Sopimus kestää yhden kuukauden",
+            "Sopimus ei ole voimassa"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "q3",
+          "type": "multiple-choice",
+          "question": "Milloin takuuvuokra palautetaan?",
+          "options": [
+            "Heti muuton jälkeen",
+            "Kun asunto on hyvässä kunnossa",
+            "Kun vuokra maksetaan",
+            "Ei koskaan"
+          ],
+          "correct": 1
+        }
+      ],
       "state": "new",
       "usedInExam": false,
       "source": "user",
