@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-15T00:00:00.000Z",
+  "lastUpdated": "2026-03-25T15:50:10.054Z",
   "texts": [
     {
       "id": "reading-001",
@@ -7,13 +7,21 @@
       "level": "B1",
       "text": "Etsin uutta asuntoa Helsingin keskustasta...",
       "translation": "I am looking for a new apartment...",
-      "keywords": ["asunto", "vuokra", "yksiö"],
+      "keywords": [
+        "asunto",
+        "vuokra",
+        "yksiö"
+      ],
       "questions": [
         {
           "id": "q1",
           "type": "multiple-choice",
           "question": "Mitä henkilö etsii?",
-          "options": ["Taloa", "Yksiötä", "Kaksiota"],
+          "options": [
+            "Taloa",
+            "Yksiötä",
+            "Kaksiota"
+          ],
           "correct": 1
         }
       ],
@@ -28,7 +36,11 @@
       "level": "B1",
       "text": "Oletko käynyt kotipaikkakuntasi kirjastossa?...",
       "translation": "Have you visited your hometown library?...",
-      "keywords": ["lainata", "kirjasto", "kortti"],
+      "keywords": [
+        "lainata",
+        "kirjasto",
+        "kortti"
+      ],
       "questions": [
         {
           "id": "q1",
@@ -41,6 +53,18 @@
       "usedInExam": false,
       "source": "user",
       "createdAt": "2026-01-15T00:00:00.000Z"
+    },
+    {
+      "id": "user-1774453802594",
+      "title": "Kirjasto on kiva paikka",
+      "level": "B1",
+      "text": "Oletko käynyt kotipaikkakuntasi kirjastossa? Tiedätkö, mitä kirjastossa tehdään?\nKirjastosta voi lainata kirjoja, CD-levyjä, DVD-elokuvia ja lehtiä. Joistakin kirjastoista voi jopa lainata tavaroita, kuten ompelukoneita, kitaroita, porakoneita ja ulkopelejä!\nKirjasto on monille ihmisille kuin toinen olohuone. He viettävät siellä aikaansa, lukevat, opiskelevat tai työskentelevät. Siellä voi käyttää myös tietokonetta ja internetiä.\nKirjastossa on myös erilaisia tapahtumia. Siellä voi kokoontua lukupiiri. Joissakin kirjastoissa järjestetään suomen kielen keskustelukerhoja maahanmuuttajille. Joissakin kirjastoissa lapset voivat osallistua koulun jälkeen läksykerhoon. Siellä joku aikuinen auttaa lapsia läksyjen tekemisessä.\nJos haluat lainata kirjastosta jotain kotiin, tarvitset kirjastokortin. Se ei maksa mitään. Voit kysyä sitä kirjaston henkilökunnalta. Ota silloin mukaan henkilöllisyystodistus.",
+      "keywords": [],
+      "questions": [],
+      "state": "new",
+      "usedInExam": false,
+      "source": "user",
+      "createdAt": "2026-03-25T15:50:02.595Z"
     }
   ]
 }
