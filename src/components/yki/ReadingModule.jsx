@@ -13,6 +13,7 @@ export default function ReadingModule({ mode }) {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [wordPopup, setWordPopup] = useState(null);
+  const [showFullText, setShowFullText] = useState(false);
   const [newText, setNewText] = useState({ title: '', text: '', level: 'B1' });
   const [pendingExport, setPendingExport] = useState(0);
 
@@ -22,7 +23,6 @@ export default function ReadingModule({ mode }) {
     setCurrentIdx(0);
     setAnswers({});
     setShowResults(false);
-    // Load pending export count
     const pending = JSON.parse(localStorage.getItem('vocab-pending-commit') || '[]');
     setPendingExport(pending.length);
   }, [mode]);
@@ -59,7 +59,7 @@ export default function ReadingModule({ mode }) {
     console.log('Word clicked:', word);
     
     const clean = word.replace(/[^a-zäöå]/gi, '');
-    if (clean.length < 4) return;
+    if (clean.length < 3) return;
     
     const localVocab = JSON.parse(localStorage.getItem('finnish-vocab-v3') || '[]');
     const exists = localVocab.some(w => w.word.toLowerCase() === clean.toLowerCase());
@@ -253,6 +253,7 @@ export default function ReadingModule({ mode }) {
 
   return (
     <Card className="yki-reading" style={{ position: 'relative', zIndex: 1 }}>
+      {/* Word Popup */}
       {wordPopup && (
         <div style={{
           position: 'fixed',
@@ -302,6 +303,68 @@ export default function ReadingModule({ mode }) {
             >
               Sulje
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full Text Modal - Shows ENTIRE text */}
+      {showFullText && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.7)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            padding: '20px'
+          }} 
+          onClick={() => setShowFullText(false)}
+        >
+          <div 
+            style={{
+              background: 'white',
+              padding: '32px',
+              borderRadius: '12px',
+              maxWidth: '600px',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              position: 'relative'
+            }} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setShowFullText(false)}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: 'none',
+                border: 'none',
+                fontSize: '1.5rem',
+                cursor: 'pointer',
+                color: '#666'
+              }}
+            >X</button>
+            
+            <h3 style={{ marginTop: 0, color: '#003580' }}>{currentText.title}</h3>
+            <span style={{ background: '#e8f4fd', color: '#003580', padding: '4px 10px', borderRadius: '12px', fontSize: '0.85rem' }}>{currentText.level}</span>
+            
+            <div style={{ marginTop: '20px', lineHeight: '1.8', fontSize: '1.1rem', whiteSpace: 'pre-wrap' }}>
+              {currentText.text}
+            </div>
+            
+            {currentText.translation && (
+              <details style={{ marginTop: '20px' }}>
+                <summary style={{ cursor: 'pointer', color: '#003580', fontWeight: '600' }}>
+                  Näytä englanninkielinen käännös
+                </summary>
+                <p style={{ fontStyle: 'italic', color: '#666', marginTop: '10px', lineHeight: '1.6' }}>
+                  {currentText.translation}
+                </p>
+              </details>
+            )}
           </div>
         </div>
       )}
@@ -372,7 +435,18 @@ export default function ReadingModule({ mode }) {
         <span style={{ background: '#e8f4fd', color: '#003580', padding: '4px 10px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '600' }}>{currentText.level}</span>
       </div>
 
-      <div style={{ margin: '20px 0', lineHeight: '1.8', fontSize: '1.05rem' }}>
+      {/* FULL TEXT DISPLAY - No truncation */}
+      <div 
+        style={{ 
+          margin: '20px 0', 
+          lineHeight: '2', 
+          fontSize: '1.05rem',
+          whiteSpace: 'pre-wrap',
+          wordWrap: 'break-word',
+          overflow: 'visible',
+          maxHeight: 'none'
+        }}
+      >
         {currentText.text?.split(' ').map((word, i) => {
           const clean = word.replace(/[^a-zäöå]/gi, '');
           return (
@@ -395,6 +469,24 @@ export default function ReadingModule({ mode }) {
           );
         })}
       </div>
+
+      {/* View Full Text Button */}
+      <button 
+        onClick={() => setShowFullText(true)}
+        style={{ 
+          cursor: 'pointer', 
+          padding: '10px 20px', 
+          background: '#6c757d', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '8px',
+          marginBottom: '16px',
+          fontSize: '0.95rem',
+          fontWeight: '600'
+        }}
+      >
+        📖 Lue koko teksti
+      </button>
 
       {currentText.translation && (
         <details style={{ margin: '15px 0', padding: '12px', background: '#f8fafc', borderRadius: '8px' }}>

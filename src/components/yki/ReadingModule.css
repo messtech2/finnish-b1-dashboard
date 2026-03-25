@@ -798,3 +798,12 @@
     width: 100%;
   }
 }
+
+/* Make text area show more content */
+.reading-text {
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  line-height: 2 !important;
+  padding: 20px !important;
+}
