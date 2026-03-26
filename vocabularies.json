@@ -782,5 +782,133 @@
     "exampleTranslation": "I want to live in a detached house in the future.",
     "category": "nouns",
     "difficulty": "easy"
+  },
+  {
+    "word": "huoltomies",
+    "meaning": "maintenance worker",
+    "example": "Huoltomies tulee korjaamaan vesihanan.",
+    "exampleTranslation": "The maintenance worker comes to fix the faucet.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "huoltoyhtiö",
+    "meaning": "maintenance company",
+    "example": "Huoltoyhtiö hoitaa talon korjaukset.",
+    "exampleTranslation": "The maintenance company handles building repairs.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "asukas",
+    "meaning": "resident",
+    "example": "Talossa on paljon asukkaita.",
+    "exampleTranslation": "There are many residents in the building.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "tuota",
+    "meaning": "well / um (filler word)",
+    "example": "Tuota… en ole varma tästä.",
+    "exampleTranslation": "Well… I'm not sure about this.",
+    "category": "expression",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vesihana",
+    "meaning": "water tap / faucet",
+    "example": "Vesihana on rikki keittiössä.",
+    "exampleTranslation": "The water tap is broken in the kitchen.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vika",
+    "meaning": "fault / defect",
+    "example": "Laitteessa on vika.",
+    "exampleTranslation": "There is a fault in the device.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kunnolla",
+    "meaning": "properly / well",
+    "example": "Tee työ kunnolla.",
+    "exampleTranslation": "Do the work properly.",
+    "category": "adverbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kiinni",
+    "meaning": "closed / attached",
+    "example": "Ovi on kiinni.",
+    "exampleTranslation": "The door is closed.",
+    "category": "adverbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "rikki",
+    "meaning": "broken",
+    "example": "Pesukone on rikki.",
+    "exampleTranslation": "The washing machine is broken.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "koko ajan",
+    "meaning": "all the time",
+    "example": "Sataa koko ajan.",
+    "exampleTranslation": "It is raining all the time.",
+    "category": "expression",
+    "difficulty": "easy"
+  },
+  {
+    "word": "selvä juttu",
+    "meaning": "clear / no problem",
+    "example": "Selvä juttu, hoidan sen.",
+    "exampleTranslation": "No problem, I'll take care of it.",
+    "category": "expression",
+    "difficulty": "easy"
+  },
+  {
+    "word": "korjata",
+    "meaning": "to fix / repair",
+    "example": "Minun pitää korjata tämä laite.",
+    "exampleTranslation": "I need to fix this device.",
+    "category": "verbs",
+    "difficulty": "easy"
+  },
+  {
+    "word": "sopia",
+    "meaning": "to agree / to suit",
+    "example": "Voimmeko sopia ajasta?",
+    "exampleTranslation": "Can we agree on a time?",
+    "category": "verbs",
+    "difficulty": "medium"
+  },
+  {
+    "word": "hieno",
+    "meaning": "fine / nice / great",
+    "example": "Tämä on hieno asunto.",
+    "exampleTranslation": "This is a nice apartment.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "rappu",
+    "meaning": "staircase / entrance",
+    "example": "Asun toisessa rapussa.",
+    "exampleTranslation": "I live in the second stairwell.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "huomiseen",
+    "meaning": "until tomorrow",
+    "example": "Nähdään huomiseen!",
+    "exampleTranslation": "See you tomorrow!",
+    "category": "expression",
+    "difficulty": "easy"
   }
 ]
