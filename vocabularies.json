@@ -486,5 +486,93 @@
     "exampleTranslation": "Would you like a cup of tea?",
     "category": "food",
     "difficulty": "easy"
+  },
+  {
+    "word": "lelu",
+    "meaning": "toy",
+    "example": "Lapsi leikkii uudella lelulla.",
+    "exampleTranslation": "The child plays with a new toy.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kirjoituspöytä",
+    "meaning": "desk",
+    "example": "Minulla on kirjoituspöytä ikkunan vieressä.",
+    "exampleTranslation": "I have a desk next to the window.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "lattia",
+    "meaning": "floor",
+    "example": "Lattia on puhdas ja siisti.",
+    "exampleTranslation": "The floor is clean and tidy.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "pehmeä",
+    "meaning": "soft",
+    "example": "Tämä sänky on todella pehmeä.",
+    "exampleTranslation": "This bed is really soft.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "leveä",
+    "meaning": "wide",
+    "example": "Tie on leveä ja turvallinen.",
+    "exampleTranslation": "The road is wide and safe.",
+    "category": "adjectives",
+    "difficulty": "medium"
+  },
+  {
+    "word": "matala",
+    "meaning": "low/short",
+    "example": "Pöytä on liian matala minulle.",
+    "exampleTranslation": "The table is too low for me.",
+    "category": "adjectives",
+    "difficulty": "easy"
+  },
+  {
+    "word": "aika",
+    "meaning": "time",
+    "example": "Minulla ei ole paljon aikaa tänään.",
+    "exampleTranslation": "I don't have much time today.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "seinä",
+    "meaning": "wall",
+    "example": "Seinä on maalattu valkoiseksi.",
+    "exampleTranslation": "The wall is painted white.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "viihtyisä",
+    "meaning": "cozy/comfortable",
+    "example": "Tämä asunto on todella viihtyisä.",
+    "exampleTranslation": "This apartment is really cozy.",
+    "category": "adjectives",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kantaa",
+    "meaning": "to carry",
+    "example": "Voin kantaa nämä laukut autoon.",
+    "exampleTranslation": "I can carry these bags to the car.",
+    "category": "verbs",
+    "difficulty": "medium"
+  },
+  {
+    "word": "viedä",
+    "meaning": "to take (away) / to bring",
+    "example": "Voitko viedä roskat ulos?",
+    "exampleTranslation": "Can you take the trash outside?",
+    "category": "verbs",
+    "difficulty": "medium"
   }
 ]
