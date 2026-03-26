@@ -617,3 +617,85 @@
   background: var(--error);
   color: white;
 }
+
+/* Mobile card layout */
+.vocab-list {
+  width: 100%;
+  max-width: 100%;
+}
+
+.vocab-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vocab-card {
+  width: 100%;
+  padding: 16px;
+}
+
+/* Ensure no horizontal overflow in cards */
+.vocab-header,
+.vocab-sentence,
+.actions {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Word text wrapping */
+.word-finnish {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.sentence-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Action buttons wrap on mobile */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.practice-btn,
+.action-btn {
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .vocab-card {
+    padding: 12px;
+  }
+  
+  .vocab-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .sentence-text {
+    font-size: 0.95rem;
+  }
+  
+  .category-badge,
+  .vocab-card span[style*="padding: 4px"] {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .practice-btn,
+  .action-btn {
+    width: 100%;
+  }
+}

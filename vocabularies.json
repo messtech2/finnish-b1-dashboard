@@ -910,5 +910,119 @@
     "exampleTranslation": "See you tomorrow!",
     "category": "expression",
     "difficulty": "easy"
+  },
+  [
+  {
+    "word": "etätyö",
+    "meaning": "remote work",
+    "example": "Monet ihmiset tekevät nykyään etätyötä.",
+    "exampleTranslation": "Many people work remotely nowadays.",
+    "category": "noun",
+    "difficulty": "medium"
+  },
+  {
+    "word": "lisääntyä",
+    "meaning": "to increase",
+    "example": "Etätyö on lisääntynyt viime vuosina paljon.",
+    "exampleTranslation": "Remote work has increased a lot in recent years.",
+    "category": "verb",
+    "difficulty": "medium"
+  },
+  {
+    "word": "säästää aikaa",
+    "meaning": "to save time",
+    "example": "Työntekijät voivat säästää aikaa kotona työskennellessä.",
+    "exampleTranslation": "Employees can save time when working at home.",
+    "category": "expression",
+    "difficulty": "medium"
+  },
+  {
+    "word": "haastava",
+    "meaning": "challenging",
+    "example": "Kotona työskentely voi olla myös haastavaa.",
+    "exampleTranslation": "Working at home can also be challenging.",
+    "category": "adjective",
+    "difficulty": "medium"
+  },
+  {
+    "word": "sekoittua",
+    "meaning": "to mix / get mixed",
+    "example": "Työ ja vapaa-aika voivat helposti sekoittua.",
+    "exampleTranslation": "Work and free time can easily get mixed.",
+    "category": "verb",
+    "difficulty": "medium"
+  },
+  {
+    "word": "työntekijä",
+    "meaning": "employee",
+    "example": "Jokainen työntekijä tarvitsee taukoja.",
+    "exampleTranslation": "Every employee needs breaks.",
+    "category": "noun",
+    "difficulty": "easy"
+  },
+  {
+    "word": "sopii hyvin",
+    "meaning": "suits well / fits well",
+    "example": "Joillekin ihmisille etätyö sopii hyvin.",
+    "exampleTranslation": "For some people, remote work suits them well.",
+    "category": "expression",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kaivata",
+    "meaning": "to miss / long for",
+    "example": "Osa ihmisistä kaipaa työpaikan sosiaalisia tilanteita.",
+    "exampleTranslation": "Some people miss social situations at the workplace.",
+    "category": "verb",
+    "difficulty": "medium"
+  },
+  {
+    "word": "sosiaalinen tilanne",
+    "meaning": "social situation",
+    "example": "Työpaikalla on monia sosiaalisia tilanteita.",
+    "exampleTranslation": "There are many social situations at the workplace.",
+    "category": "noun",
+    "difficulty": "medium"
+  },
+  {
+    "word": "häiriötekijä",
+    "meaning": "distraction",
+    "example": "Kotona voi olla vaikea keskittyä häiriötekijöiden takia.",
+    "exampleTranslation": "At home it can be difficult to concentrate because of distractions.",
+    "category": "noun",
+    "difficulty": "medium"
+  },
+  {
+    "word": "keskittyä",
+    "meaning": "to concentrate",
+    "example": "On tärkeää keskittyä työn tekemiseen.",
+    "exampleTranslation": "It is important to concentrate on doing work.",
+    "category": "verb",
+    "difficulty": "medium"
+  },
+  {
+    "word": "ympärillä",
+    "meaning": "around / surrounding",
+    "example": "Jos ympärillä on paljon häiriöitä, keskittyminen vaikeutuu.",
+    "exampleTranslation": "If there are many disturbances around, concentrating becomes difficult.",
+    "category": "adverb",
+    "difficulty": "medium"
+  },
+  {
+    "word": "vapaa-aika",
+    "meaning": "free time",
+    "example": "Työn ja vapaa-ajan raja voi hämärtyä kotona.",
+    "exampleTranslation": "The boundary between work and free time can blur at home.",
+    "category": "noun",
+    "difficulty": "medium"
+  },
+  {
+    "word": "vaikea",
+    "meaning": "difficult",
+    "example": "Joillekin etätyö voi olla vaikeaa.",
+    "exampleTranslation": "For some, remote work can be difficult.",
+    "category": "adjective",
+    "difficulty": "easy"
   }
+]
 ]

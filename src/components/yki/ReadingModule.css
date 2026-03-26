@@ -807,3 +807,76 @@
   line-height: 2 !important;
   padding: 20px !important;
 }
+
+/* Mobile text display */
+.reading-text {
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.reading-text .word {
+  display: inline;
+  word-break: break-word;
+}
+
+/* Question options stack on mobile */
+.question-card .options,
+.question-card .true-false {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.question-card .option {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
+/* Action buttons wrap */
+.reading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-submit,
+.btn-nav {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .reading-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .reading-text {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  
+  .question-card p {
+    font-size: 1rem;
+  }
+  
+  .btn-submit,
+  .btn-nav,
+  .btn-add-text,
+  .btn-sync {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .add-text-section {
+    text-align: center;
+  }
+  
+  .add-text-section button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}

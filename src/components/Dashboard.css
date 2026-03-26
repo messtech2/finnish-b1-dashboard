@@ -67,3 +67,76 @@
     font-size: 1.3rem;
   }
 }
+
+/* Mobile tab navigation */
+.dashboard-nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.dashboard-nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.nav-tab {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.nav-tab:hover {
+  border-color: #003580;
+  background: #f8f9fa;
+}
+
+.nav-tab.active {
+  background: #003580;
+  color: white;
+  border-color: #003580;
+}
+
+/* Mobile content padding */
+.dashboard-content {
+  padding: 16px 12px;
+}
+
+/* Prevent horizontal scroll in content */
+.dashboard-content > * {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .dashboard-nav {
+    padding: 8px;
+    gap: 6px;
+  }
+  
+  .nav-tab {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .exam-countdown div:first-child {
+    font-size: 1.3rem;
+  }
+  
+  .exam-countdown div:last-child {
+    font-size: 0.85rem;
+  }
+}
