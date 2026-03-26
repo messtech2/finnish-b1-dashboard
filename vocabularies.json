@@ -574,5 +574,213 @@
     "exampleTranslation": "Can you take the trash outside?",
     "category": "verbs",
     "difficulty": "medium"
+  },
+  {
+    "word": "kylpyhuone",
+    "meaning": "bathroom",
+    "example": "Kylpyhuoneessa on suihku ja pesuallas.",
+    "exampleTranslation": "There is a shower and a sink in the bathroom.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "makuuhuone",
+    "meaning": "bedroom",
+    "example": "Makuuhuone on rauhallinen ja hiljainen.",
+    "exampleTranslation": "The bedroom is calm and quiet.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "parveke",
+    "meaning": "balcony",
+    "example": "Asunnossa on iso parveke.",
+    "exampleTranslation": "The apartment has a big balcony.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "verhot",
+    "meaning": "curtains",
+    "example": "Verhot ovat valkoiset ja kauniit.",
+    "exampleTranslation": "The curtains are white and beautiful.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "taulu",
+    "meaning": "painting/picture",
+    "example": "Seinällä on kaunis taulu.",
+    "exampleTranslation": "There is a beautiful painting on the wall.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "suihku",
+    "meaning": "shower",
+    "example": "Käyn suihkussa joka aamu.",
+    "exampleTranslation": "I take a shower every morning.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kylpyamme",
+    "meaning": "bathtub",
+    "example": "Kylpyhuoneessa on iso kylpyamme.",
+    "exampleTranslation": "There is a big bathtub in the bathroom.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "pesuallas",
+    "meaning": "sink",
+    "example": "Pesuallas on kylpyhuoneessa.",
+    "exampleTranslation": "The sink is in the bathroom.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "pakastin",
+    "meaning": "freezer",
+    "example": "Pakastimessa on paljon ruokaa.",
+    "exampleTranslation": "There is a lot of food in the freezer.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "hella",
+    "meaning": "stove",
+    "example": "Hella on uusi ja toimii hyvin.",
+    "exampleTranslation": "The stove is new and works well.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "uuni",
+    "meaning": "oven",
+    "example": "Laitan ruoan uuniin.",
+    "exampleTranslation": "I put the food in the oven.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "mikroaaltouuni",
+    "meaning": "microwave",
+    "example": "Lämmitän ruoan mikroaaltouunissa.",
+    "exampleTranslation": "I heat the food in the microwave.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kahvinkeitin",
+    "meaning": "coffee maker",
+    "example": "Kahvinkeitin on keittiössä.",
+    "exampleTranslation": "The coffee maker is in the kitchen.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "vedenkeitin",
+    "meaning": "electric kettle",
+    "example": "Keitän vettä vedenkeittimellä.",
+    "exampleTranslation": "I boil water with a kettle.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "leivänpaahdin",
+    "meaning": "toaster",
+    "example": "Paahdan leipää leivänpaahtimella.",
+    "exampleTranslation": "I toast bread with a toaster.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kaukosäädin",
+    "meaning": "remote control",
+    "example": "Missä on television kaukosäädin?",
+    "exampleTranslation": "Where is the TV remote control?",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "astianpesukone",
+    "meaning": "dishwasher",
+    "example": "Astianpesukone on täynnä.",
+    "exampleTranslation": "The dishwasher is full.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "jääkaappi",
+    "meaning": "refrigerator",
+    "example": "Jääkaapissa on maitoa ja juustoa.",
+    "exampleTranslation": "There is milk and cheese in the fridge.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "alakerta",
+    "meaning": "downstairs",
+    "example": "Olohuone on alakerrassa.",
+    "exampleTranslation": "The living room is downstairs.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "yläkerta",
+    "meaning": "upstairs",
+    "example": "Makuuhuone on yläkerrassa.",
+    "exampleTranslation": "The bedroom is upstairs.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "kellari",
+    "meaning": "basement",
+    "example": "Varasto on kellarissa.",
+    "exampleTranslation": "The storage is in the basement.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "autotalli",
+    "meaning": "garage",
+    "example": "Auto on autotallissa.",
+    "exampleTranslation": "The car is in the garage.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "rappukäytävä",
+    "meaning": "stairwell",
+    "example": "Rappukäytävä on siisti.",
+    "exampleTranslation": "The stairwell is clean.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "kerrostalo",
+    "meaning": "apartment building",
+    "example": "Asun kerrostalossa Helsingissä.",
+    "exampleTranslation": "I live in an apartment building in Helsinki.",
+    "category": "nouns",
+    "difficulty": "easy"
+  },
+  {
+    "word": "rivitalo",
+    "meaning": "row house",
+    "example": "Rivitalossa on oma piha.",
+    "exampleTranslation": "A row house has its own yard.",
+    "category": "nouns",
+    "difficulty": "medium"
+  },
+  {
+    "word": "omakotitalo",
+    "meaning": "detached house",
+    "example": "Haluan asua omakotitalossa tulevaisuudessa.",
+    "exampleTranslation": "I want to live in a detached house in the future.",
+    "category": "nouns",
+    "difficulty": "easy"
   }
 ]
