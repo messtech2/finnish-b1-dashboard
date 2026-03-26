@@ -1,0 +1,240 @@
+.study-plan {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.study-plan > * {
+  margin-bottom: 20px;
+}
+
+/* Learning Loop */
+.learning-loop h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #003580;
+}
+
+.loop-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.loop-step {
+  padding: 16px 20px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.loop-icon {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.loop-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: block;
+  color: #003580;
+}
+
+.loop-desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.loop-arrow {
+  font-size: 1.2rem;
+  color: #003580;
+  font-weight: bold;
+}
+
+/* Phase Indicator */
+.phase-indicator h2 {
+  margin-bottom: 16px;
+  color: #003580;
+}
+
+.phase-display {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.phase-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  display: block;
+}
+
+.phase-dates {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.all-phases {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.phase-badge {
+  padding: 6px 12px;
+  border: 2px solid #ccc;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.5;
+}
+
+.phase-badge.active {
+  opacity: 1;
+  background: #003580;
+  color: white;
+  border-color: #003580;
+}
+
+/* Today's Plan */
+.todays-plan h2 {
+  margin-bottom: 16px;
+  color: #003580;
+}
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.plan-item {
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.plan-icon {
+  font-size: 1.2rem;
+}
+
+.plan-task {
+  font-weight: 600;
+  color: #003580;
+}
+
+.plan-time {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Grammar Topic */
+.grammar-topic h2,
+.writing-task h2,
+.speaking-task h2,
+.weekly-structure h2 {
+  margin-bottom: 16px;
+  color: #003580;
+}
+
+.grammar-display {
+  text-align: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.grammar-topic-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #003580;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.grammar-hint {
+  color: #666;
+  margin: 0;
+}
+
+/* Task Boxes */
+.task-box {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #003580;
+}
+
+.task-prompt {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #003580;
+  margin: 0 0 8px 0;
+}
+
+.task-hint {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Weekly Structure */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.day-card {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.day-card.full {
+  background: #e8f4fd;
+}
+
+.day-card.light {
+  background: #fff3cd;
+}
+
+.day-card.mock {
+  background: #f8d7da;
+}
+
+.day-name {
+  font-weight: 700;
+  color: #003580;
+}
+
+.day-task {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .loop-steps {
+    flex-direction: column;
+  }
+  
+  .loop-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .plan-grid,
+  .week-grid {
+    grid-template-columns: 1fr;
+  }
+}

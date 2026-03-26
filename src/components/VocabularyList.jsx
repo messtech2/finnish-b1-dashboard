@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTTS } from '../hooks/useTTS';
 import { useSRS } from '../hooks/useSRS';
 import Card from './ui/Card';
@@ -48,19 +48,28 @@ export default function VocabularyList({
     if (onDelete) onDelete(wordId);
   };
 
-  // ✅ Filter FIRST, then let parent handle pagination
+  // ✅ Filter words by status - applied BEFORE pagination
   const filteredWords = useMemo(() => {
+    if (!words) return [];
     if (filter === 'all') return words;
     return words.filter(w => (w.status || 'new') === filter);
   }, [words, filter]);
 
-  // ✅ Calculate summary from ALL words (not filtered)
-  const summary = useMemo(() => ({
-    total: words.length,
-    new: words.filter(w => (w.status || 'new') === 'new').length,
-    learning: words.filter(w => w.status === 'learning').length,
-    mastered: words.filter(w => w.status === 'mastered').length
-  }), [words]);
+  // ✅ Calculate summary from ALL words (for the colored cards)
+  const summary = useMemo(() => {
+    if (!words) return { total: 0, new: 0, learning: 0, mastered: 0 };
+    return {
+      total: words.length,
+      new: words.filter(w => (w.status || 'new') === 'new').length,
+      learning: words.filter(w => w.status === 'learning').length,
+      mastered: words.filter(w => w.status === 'mastered').length
+    };
+  }, [words]);
+
+  // ✅ Debug log when filter changes
+  useEffect(() => {
+    console.log(`🔍 Filter: ${filter}, Showing ${filteredWords.length} of ${words?.length || 0} words`);
+  }, [filter, filteredWords.length, words?.length]);
 
   if (!words || words.length === 0) {
     return (
@@ -75,10 +84,14 @@ export default function VocabularyList({
     <div className="vocab-list">
       <div className="vocab-header">
         <h2>Sanasto</h2>
-        <span className="vocab-count">{filteredWords.length} / {totalWords} sanaa</span>
+        {/* ✅ Show filtered count / total count */}
+        <span className="vocab-count">
+          {filteredWords.length} / {totalWords} sanaa
+          {filter !== 'all' && <span style={{ marginLeft: '8px', color: '#003580' }}>(suodatettu: {filter})</span>}
+        </span>
       </div>
       
-      {/* Progress Summary */}
+      {/* Progress Summary Cards */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
         <div style={{ background: '#e8f4fd', padding: '10px 16px', borderRadius: '8px', textAlign: 'center', minWidth: '80px' }}>
           <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#003580' }}>{summary.total}</div>
@@ -103,7 +116,10 @@ export default function VocabularyList({
         {['all', 'new', 'learning', 'mastered'].map(f => (
           <button
             key={f}
-            onClick={() => setFilter(f)}
+            onClick={() => {
+              console.log(`🔘 Filter clicked: ${f}`);
+              setFilter(f);
+            }}
             style={{
               padding: '6px 14px',
               background: filter === f ? '#003580' : 'white',
@@ -151,10 +167,12 @@ export default function VocabularyList({
                   <button className="audio-btn" onClick={(e) => { e.stopPropagation(); stop(); speak(word.example || word.word); }} type="button">🔈</button>
                   <p className="sentence-text">{word.example}</p>
                 </div>
+                {/* ✅ Visible Counters - Always shown */}
                 <div style={{ display: 'flex', gap: '16px', padding: '10px 0', borderTop: '1px dashed #eee', fontSize: '0.9rem', color: '#666' }}>
-                  <span><strong>✅</strong> {correctCount}</span>
-                  <span><strong>❌</strong> {wrongCount}</span>
-                  <span><strong>📅</strong> {lastSeen}</span>
+                  <span title="Oikein"><strong style={{ color: '#28a745' }}>✅</strong> {correctCount}</span>
+                  <span title="Väärin"><strong style={{ color: '#dc3545' }}>❌</strong> {wrongCount}</span>
+                  <span title="Viimeksi nähty"><strong>📅</strong> {lastSeen}</span>
+                  {status === 'mastered' && <span title="Hallittu" style={{ color: '#155724', fontWeight: '600' }}>🏆</span>}
                 </div>
                 {isOpen && (
                   <div className="actions">

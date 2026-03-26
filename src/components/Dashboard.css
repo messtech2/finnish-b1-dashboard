@@ -1,0 +1,69 @@
+
+/* Global Countdown */
+.exam-countdown {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Navigation Tabs */
+.dashboard-nav {
+  display: flex;
+  gap: 4px;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  overflow-x: auto;
+  flex-wrap: wrap;
+}
+
+.nav-tab {
+  padding: 10px 20px;
+  background: white;
+  border: 2px solid #dee2e6;
+  border-radius: 8px 8px 0 0;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-tab:hover {
+  background: #e8f4fd;
+  border-color: #003580;
+}
+
+.nav-tab.active {
+  background: #003580;
+  color: white;
+  border-color: #003580;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  padding: 20px;
+  background: #f8fafc;
+  min-height: calc(100vh - 200px);
+}
+
+.tab-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .dashboard-nav {
+    padding: 8px 12px;
+  }
+  
+  .nav-tab {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .exam-countdown div:first-child {
+    font-size: 1.3rem;
+  }
+}
